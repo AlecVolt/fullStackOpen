@@ -25,12 +25,28 @@ function App() {
     setSelected(Math.floor(Math.random() * anecdotes.length));
   }
 
+  const showMostVotesAnecdote = () => {
+    const maxVotes = Math.max(...votes);
+    return (
+      <>
+        <p>{anecdotes[votes.indexOf(maxVotes)]}</p>
+        <p>has {maxVotes} votes</p>
+      </>
+    );
+  }
+
   return (
     <>
-      <h3>{anecdotes[selected]}</h3>
+      <h2>Anecdote of the day</h2>
+      <p>{anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
       <button onClick={addVote}>vote</button>
       <button onClick={randomSelected}>next anecdote</button>
+
+      <h2>Anecdote with the most votes</h2>
+      <p>
+        {showMostVotesAnecdote()}
+      </p>
     </>
   )
 }
