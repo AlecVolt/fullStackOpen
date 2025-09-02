@@ -8,7 +8,11 @@ const AddButton = ({ onClick, text }) => {
 
 const StatisticLine = ({ name, amount }) => {
   return (
-    <p>{name}: {amount}</p>
+    // <p>{name}: {amount}</p>
+    <tr>
+      <td>{name}: </td>
+      <td>{amount}</td>
+    </tr>
   ) 
 }
 
@@ -21,13 +25,17 @@ const Statistics = ({ good, neutral, bad }) => {
         (good + neutral + bad) === 0 ? 
         <p>No feedback given</p> :
         <>
-        <StatisticLine name={'Good'} amount={good} />
-        <StatisticLine name={'Neutral'} amount={neutral} />
-        <StatisticLine name={'Bad'} amount={bad} />
-        
-        <StatisticLine name={'All'} amount={good + neutral + bad} />
-        <StatisticLine name={'Average'} amount={(good - bad) / (good + neutral + bad)} />
-        <StatisticLine name={'Positive'} amount={good / (good + neutral + bad) * 100 + '%'} />
+        <table>
+          <tbody>
+            <StatisticLine name={'Good'} amount={good} />
+            <StatisticLine name={'Neutral'} amount={neutral} />
+            <StatisticLine name={'Bad'} amount={bad} />
+
+            <StatisticLine name={'All'} amount={good + neutral + bad} />
+            <StatisticLine name={'Average'} amount={(good - bad) / (good + neutral + bad)} />
+            <StatisticLine name={'Positive'} amount={good / (good + neutral + bad) * 100 + '%'} />
+          </tbody>
+        </table>
         </>
       }
     </>
