@@ -1,11 +1,28 @@
-import { useState } from "react"
+import { useState } from "react";
 
-function App() {
+const Statistics = ({ good, neutral, bad }) => {
+  return (
+    <>
+      <h2>statistics</h2>
+      <p>Good: {good}</p>
+      <p>Neutral: {neutral}</p>
+      <p>Bad: {bad}</p>
+      <p>All: {good + neutral + bad}</p>
+      <p>
+        Average: {(good - bad) / (good + neutral + bad)}
+      </p>
+      <p>
+        Positive: {good / (good + neutral + bad) * 100}%
+      </p>
+    </>
+  )
+}
+
+
+const App = () => {
   const [ good, setGood ] = useState(0);
   const [ neutral, setNeutral ] = useState(0);
   const [ bad, setBad ] = useState(0);
-  const [ average, setAverage ] = useState(0);
-  const [ positive, setPositive ] = useState(0);
 
   const addGood = () => {
     setGood(good => good + 1);
@@ -28,20 +45,10 @@ function App() {
         <button onClick={addBad}>bad</button>
       </div>
 
-      <h2>statistics</h2>
-      <p>Good: {good}</p>
-      <p>Neutral: {neutral}</p>
-      <p>Bad: {bad}</p>
-      <p>All: {good + neutral + bad}</p>
-      <p>
-        Average: {(good - bad) / (good + neutral + bad)}
-      </p>
-      <p>
-        Positive: {good / (good + neutral + bad) * 100}%
-      </p>
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </>
   )
 
 }
 
-export default App
+export default App;
