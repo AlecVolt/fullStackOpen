@@ -8,7 +8,6 @@ const AddButton = ({ onClick, text }) => {
 
 const StatisticLine = ({ name, amount }) => {
   return (
-    // <p>{name}: {amount}</p>
     <tr>
       <td>{name}: </td>
       <td>{amount}</td>
