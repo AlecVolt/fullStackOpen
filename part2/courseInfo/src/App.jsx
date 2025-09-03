@@ -43,13 +43,30 @@ const App = () => {
           id: 2
         }
       ]
+    },
+    {
+      name: 'Web Development',
+      id: 3,
+      parts: [
+        {
+          name: 'HTML & CSS',
+          exercises: 14,
+          id: 1
+        },
+        {
+          name: 'JavaScript',
+          exercises: 10,
+          id: 2
+        }
+      ]
     }
   ];
 
   return (
     <>
-      <Course course={courses[0]} />
-      <Course course={courses[1]} />
+      {
+        courses.map(course => <Course key={course.id} course={course}/>)
+      }
     </>    
   )
 
