@@ -1,13 +1,5 @@
 import Course from './Course';
 
-const Total = (props) => {
-  return (
-    <p>
-      Number of exercises {props.parts.reduce((accum, curr) => accum + curr.exercises, 0)}
-    </p>
-  )
-}
-
 const App = () => {
   const course = {
     id: 1,

@@ -1,6 +1,6 @@
 const Total = ({ parts }) => {
     return (
-        <p><b>total of {parts.reduce((accum, curr) => (accum + curr.exercises), 0)} exercises</b></p>
+        <p><b>total of {parts.reduce((accum, curr) => accum + curr.exercises, 0)} exercises</b></p>
     )
 }
 
