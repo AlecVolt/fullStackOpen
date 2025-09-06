@@ -1,4 +1,3 @@
-import Person from "./Person";
 import Persons from "./Persons";
 
 const Filter = ({ handleFilterChange, filter, filteredPersons,  }) => {
