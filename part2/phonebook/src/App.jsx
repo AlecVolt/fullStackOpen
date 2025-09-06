@@ -3,26 +3,36 @@ import { useState } from "react";
 const App = () => {
 
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', number: '040-123456' },
   ]);
 
   const [newName, setNewName] = useState('');
+  const [newNumber, setNewNumber] = useState('');
 
   const handleNewNameChange = (event) => {
     setNewName(event.target.value);
   }
 
+  const handleNewNumberChange = (event) => {
+    setNewNumber(event.target.value);
+  }
+
   const handleAddNewPerson = (event) => {
     event.preventDefault();
-    const isContact = persons.some(person => person.name === newName);
-    if (isContact) {
+
+    if (persons.some(person => person.name === newName)) {
       alert(`${newName} is already added to phonebook`);
-      setNewName('');
       return;
     }
 
-    setPersons(persons.concat({ name: newName }));
+    if (persons.some(person => person.number === newNumber)) {
+      alert(`${newNumber} is already added to phonebook`);
+      return;
+    }
+
+    setPersons(persons.concat({ name: newName, number: newNumber }));
     setNewName('');
+    setNewNumber('');
   }
 
   return (
@@ -33,6 +43,9 @@ const App = () => {
           Name: <input onChange={handleNewNameChange} value={newName} />
         </div>
         <div>
+          Number: <input onChange={handleNewNumberChange} value={newNumber} />
+        </div>
+        <div>
           <button type='submit'>add</button>
         </div>
       </form>
@@ -40,7 +53,7 @@ const App = () => {
       <h2>Numbers</h2>
       {
         persons.map(person => 
-          <p key={person.name}>{person.name}</p>
+          <p key={person.name}>{person.name}: {person.number}</p>
         )
       }
     </>
