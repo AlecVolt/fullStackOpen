@@ -14,6 +14,13 @@ const App = () => {
 
   const handleAddNewPerson = (event) => {
     event.preventDefault();
+    const isContact = persons.some(person => person.name === newName);
+    if (isContact) {
+      alert(`${newName} is already added to phonebook`);
+      setNewName('');
+      return;
+    }
+
     setPersons(persons.concat({ name: newName }));
     setNewName('');
   }
@@ -29,8 +36,6 @@ const App = () => {
           <button type='submit'>add</button>
         </div>
       </form>
-
-      <div>{newName}</div>
 
       <h2>Numbers</h2>
       {
