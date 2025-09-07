@@ -39,27 +39,33 @@ const App = () => {
   const handleAddNewPerson = (event) => {
     event.preventDefault();
 
-    if (persons.some(person => person.name === newPerson.name)) {
-      alert(`${newPerson.name} is already added to phonebook`);
-      return;
+    const existingPerson = persons.find(person => person.name === newPerson.name || person.number === newPerson.number);
+
+    if (!existingPerson) {
+      personService
+        .addNewPerson(newPerson)
+        .then(returnedPerson => 
+          setPersons(persons.concat(returnedPerson))
+        );
+    } else {
+      if (existingPerson.name === newPerson.name) {
+        if (!confirm(`${newPerson.name} is already added to phonebook, replace the old number with a new one?`)) {
+          return;
+        }
+      }
+
+      if (existingPerson.number === newPerson.number) {
+        if (!confirm(`${newPerson.number} is already added to phonebook, rename a contact?`)) {
+          return;
+        }
+      }
+
+      personService
+          .updatePerson(existingPerson.id, newPerson)
+          .then(returnedPerson => 
+            setPersons(persons.map(person => person.id === existingPerson.id ? returnedPerson : person))
+          );
     }
-
-    if (persons.some(person => person.number === newPerson.number)) {
-      alert(`${newPerson.number} is already added to phonebook`);
-      return;
-    }
-
-    personService
-      .addNewPerson(newPerson)
-      .then(returnedPerson => 
-        setPersons(persons.concat(returnedPerson))
-      );
-
-    // axios
-    //   .post('http://localhost:3001/persons', newPerson)
-    //   .then(response => 
-    //     setPersons(persons.concat(response.data))
-    //   );
 
     setNewPerson({ name: '', number: '' });
   }

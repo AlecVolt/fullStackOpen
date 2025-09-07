@@ -20,9 +20,15 @@ const deletePerson = (id) => {
         .then(response => response.data);
 }
 
+const updatePerson = (id, payload) => {
+    return axios
+        .put(`${baseUrl}/${id}`, payload)
+        .then(response => response.data);
+}
+
 // const getAll = async () => {
 //     const response = await axios.get(baseUrl);
 //     return response.data;
 // }
 
-export default { getAll, addNewPerson, deletePerson };
+export default { getAll, addNewPerson, deletePerson, updatePerson };
