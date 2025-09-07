@@ -44,7 +44,13 @@ const App = () => {
       return;
     }
 
-    setPersons(persons.concat({ name: newPerson.name, number: newPerson.number, id: persons.length + 1 }));
+    axios
+      .post('http://localhost:3001/persons', newPerson)
+      .then(response => 
+        setPersons(persons.concat(response.data))
+      );
+
+    // setPersons(persons.concat({ name: newPerson.name, number: newPerson.number, id: persons.length + 1 }));
     setNewPerson({ name: '', number: '' });
   }
 
