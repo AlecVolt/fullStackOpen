@@ -11,6 +11,7 @@ const App = () => {
   const [ persons, setPersons ] = useState([]);
 
   const [ message, setMessage ] = useState(null);
+  const [ messageStyle, setMessageStyle ] = useState('notification');
 
   useEffect(() => {
     personService
@@ -51,6 +52,7 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
         );
 
+      setMessageStyle('notification');
       setMessage(`Added ${newPerson.name}: ${newPerson.number}`);
       setTimeout(() => {
         setMessage(null);
@@ -75,6 +77,7 @@ const App = () => {
             setPersons(persons.map(person => person.id === existingPerson.id ? returnedPerson : person))
           );
 
+      setMessageStyle('notification');
       setMessage(`Contact changed`);
       setTimeout(() => {
         setMessage(null);
@@ -90,12 +93,23 @@ const App = () => {
       .deletePerson(id)
       .then(() => {
         setPersons(persons.filter(person => person.id != id));
-      });
+        
+        setMessageStyle('notification');
+        setMessage(`Contact deleted`);
 
-      setMessage(`Contact deleted`);
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+      })
+      .catch(err => {
+        setMessageStyle('error');
+        setMessage(`Information of ${persons.find(person => person.id === id).name} has already been removed from server`);
+
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+      });
+      
     }
   }
 
@@ -112,7 +126,7 @@ const App = () => {
     <>
       <h1>Phonebook</h1>
 
-      <Notification message={message} />
+      <Notification message={message} messageStyle={messageStyle} />
 
       <Filter 
         handleFilterChange={handleFilterChange}
