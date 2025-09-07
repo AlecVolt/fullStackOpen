@@ -1,6 +1,6 @@
 import Person from "./Person";
 
-const Persons = ({ persons }) => {
+const Persons = ({ persons, handlePersonDelete }) => {
     return (
         <>
             {
@@ -10,6 +10,8 @@ const Persons = ({ persons }) => {
                         key={person.id} 
                         name={person.name} 
                         number={person.number} 
+                        handlePersonDelete={handlePersonDelete}
+                        id={person.id}
                     />
                 )
             }

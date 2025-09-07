@@ -1,24 +1,9 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": "1"
-    },
-    {
       "name": "Ada Lovelace",
       "number": "39-44-5323523",
       "id": "2"
-    },
-    {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": "3"
-    },
-    {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": "4"
     },
     {
       "name": "John Doe",
@@ -31,14 +16,19 @@
       "id": "6"
     },
     {
-      "id": "e97d",
-      "name": "sahra",
-      "number": "8905480"
+      "id": "bf46",
+      "name": "Alex Stone",
+      "number": "389-79831789"
     },
     {
-      "id": "374a",
-      "name": "Alex Jan",
-      "number": "792-23728919"
+      "id": "f4a5",
+      "name": "Maria Garcia",
+      "number": "456-1239874"
+    },
+    {
+      "id": "9c3d",
+      "name": "Liam Johnson",
+      "number": "321-6549871"
     }
   ]
 }

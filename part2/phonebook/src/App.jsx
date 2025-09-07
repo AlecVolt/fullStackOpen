@@ -64,6 +64,16 @@ const App = () => {
     setNewPerson({ name: '', number: '' });
   }
 
+  const handlePersonDelete = (id) => {
+    if (confirm(`Delete ${persons.find(person => person.id === id).name}?`)) {
+      personService
+      .deletePerson(id)
+      .then(() => {
+        setPersons(persons.filter(person => person.id != id));
+      });
+    }
+  }
+
   const handleFilterChange = (event) => {
     setFilter(event.target.value.toLowerCase());
     if (event.target.value === '') {
@@ -93,6 +103,7 @@ const App = () => {
       <h2>Numbers</h2>
       <Persons 
         persons={persons}
+        handlePersonDelete={handlePersonDelete}
       />
     </>
   )

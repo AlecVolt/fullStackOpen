@@ -14,9 +14,15 @@ const addNewPerson = (payload) => {
         .then(response => response.data);
 }
 
+const deletePerson = (id) => {
+    return axios
+        .delete(`${baseUrl}/${id}`)
+        .then(response => response.data);
+}
+
 // const getAll = async () => {
 //     const response = await axios.get(baseUrl);
 //     return response.data;
 // }
 
-export default { getAll, addNewPerson };
+export default { getAll, addNewPerson, deletePerson };
