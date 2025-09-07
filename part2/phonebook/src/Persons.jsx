@@ -4,7 +4,7 @@ const Persons = ({ persons, handlePersonDelete }) => {
     return (
         <>
             {
-                persons.length > 0 &&
+                persons &&
                 persons.map(person => 
                     <Person 
                         key={person.id} 

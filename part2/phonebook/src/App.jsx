@@ -8,7 +8,7 @@ import personService from "./services/persons";
 
 const App = () => {
 
-  const [ persons, setPersons ] = useState([]);
+  const [ persons, setPersons ] = useState(null);
 
   const [ message, setMessage ] = useState(null);
   const [ messageStyle, setMessageStyle ] = useState('notification');
