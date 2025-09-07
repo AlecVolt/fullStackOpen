@@ -3,17 +3,22 @@ import axios from "axios";
 import Filter from "./Filter";
 import AddNewPersonForm from "./AddNewPersonForm";
 import Persons from "./Persons";
+import personService from "./services/persons";
 
 const App = () => {
 
   const [ persons, setPersons ] = useState([]);
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => 
-        setPersons(response.data)
-      );
+    personService
+      .getAll()
+      .then(initPersons => setPersons(initPersons));
+
+    // axios
+    //   .get('http://localhost:3001/persons')
+    //   .then(response => 
+    //     setPersons(response.data)
+    //   );
   }, []);
 
   const [ newPerson, setNewPerson ] = useState(
@@ -44,13 +49,18 @@ const App = () => {
       return;
     }
 
-    axios
-      .post('http://localhost:3001/persons', newPerson)
-      .then(response => 
-        setPersons(persons.concat(response.data))
+    personService
+      .addNewPerson(newPerson)
+      .then(returnedPerson => 
+        setPersons(persons.concat(returnedPerson))
       );
 
-    // setPersons(persons.concat({ name: newPerson.name, number: newPerson.number, id: persons.length + 1 }));
+    // axios
+    //   .post('http://localhost:3001/persons', newPerson)
+    //   .then(response => 
+    //     setPersons(persons.concat(response.data))
+    //   );
+
     setNewPerson({ name: '', number: '' });
   }
 
