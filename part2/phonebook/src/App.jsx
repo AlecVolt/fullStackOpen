@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import Filter from "./Filter";
+import Notification from "./Notification";
 import AddNewPersonForm from "./AddNewPersonForm";
 import Persons from "./Persons";
 import personService from "./services/persons";
@@ -8,6 +9,8 @@ import personService from "./services/persons";
 const App = () => {
 
   const [ persons, setPersons ] = useState([]);
+
+  const [ message, setMessage ] = useState(null);
 
   useEffect(() => {
     personService
@@ -47,6 +50,12 @@ const App = () => {
         .then(returnedPerson => 
           setPersons(persons.concat(returnedPerson))
         );
+
+      setMessage(`Added ${newPerson.name}: ${newPerson.number}`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
+
     } else {
       if (existingPerson.name === newPerson.name) {
         if (!confirm(`${newPerson.name} is already added to phonebook, replace the old number with a new one?`)) {
@@ -65,6 +74,11 @@ const App = () => {
           .then(returnedPerson => 
             setPersons(persons.map(person => person.id === existingPerson.id ? returnedPerson : person))
           );
+
+      setMessage(`Contact changed`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
     }
 
     setNewPerson({ name: '', number: '' });
@@ -77,6 +91,11 @@ const App = () => {
       .then(() => {
         setPersons(persons.filter(person => person.id != id));
       });
+
+      setMessage(`Contact deleted`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
     }
   }
 
@@ -92,6 +111,9 @@ const App = () => {
   return (
     <>
       <h1>Phonebook</h1>
+
+      <Notification message={message} />
+
       <Filter 
         handleFilterChange={handleFilterChange}
         filter={filter}
@@ -99,6 +121,7 @@ const App = () => {
       />
 
       <h2>Add a new</h2>
+
       <AddNewPersonForm 
         handleAddNewPerson={handleAddNewPerson}
         newPerson={newPerson}
