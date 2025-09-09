@@ -1,8 +1,15 @@
-const Country = ({ name, capital, area, population, languages, flags }) => {
-    console.log(languages);
+import CountryInfoBtn from "./CountryInfoBtn";
+
+const Country = ({ name, setShownCountryName }) => {
     return (
         <div>
-            <h2>{name}</h2>
+            {name} 
+            <CountryInfoBtn 
+                name={name} 
+                setShownCountryName={setShownCountryName} 
+            />
+
+            {/* <h2>{name}</h2>
             <p>Capital: {capital}</p>
             <p>Area: {area}</p>
             <p>Population: {population}</p>
@@ -17,7 +24,7 @@ const Country = ({ name, capital, area, population, languages, flags }) => {
             </ul>
             <div>
                 <img src={flags.png} alt={flags.alt} />
-            </div>
+            </div> */}
         </div>
     )
 }

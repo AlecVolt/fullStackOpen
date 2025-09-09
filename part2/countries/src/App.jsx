@@ -2,14 +2,15 @@ import { useState } from "react";
 import Countries from "./Countries";
 import { useEffect } from "react";
 import { getAll } from "./services/countries";
+import SingleCountry from "./SingleCountry";
 
 
 const App = () => {
   const [ search, setSearch ] = useState(null);
   const [ countries, setCountries ] = useState(null);
+  const [ shownCountyName, setShownCountryName ] = useState(null);
 
   useEffect(() => {
-
     if (search) {
       getAll()
         .then(data => 
@@ -22,22 +23,30 @@ const App = () => {
     setSearch(event.target.value);
   }
 
-  const handleSearch = () => {
-    setCountries(countries.filter(country => country.name.common.includes(search)));
-  }
+  // const handleSearch = () => {
+  //   setCountries(countries.filter(country => country.name.common.includes(search)));
+  // }
   
   return (
     <>
-      <div> 
-        find countries : <input onChange={handleSearchChange}/>
-      </div>
       {
-        countries &&
-        countries.length > 10 
-        ? <p>Too many matches, specify another filter</p>
-        : <Countries countries={countries} />
-      }
-      
+        shownCountyName
+        ? <SingleCountry 
+          name={shownCountyName} 
+          setShownCountryName={setShownCountryName}
+        />
+        : <>
+          <div> 
+            find countries : <input onChange={handleSearchChange}/>
+          </div>
+          {
+            countries &&
+            countries.length > 10 
+            ? <p>Too many matches, specify another filter</p>
+            : <Countries countries={countries} setShownCountryName={setShownCountryName}/>
+          }
+        </>
+      }      
     </>
   )
 }

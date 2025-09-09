@@ -7,3 +7,9 @@ export const getAll = () => {
         .get(`${baseUrl}/all`)
         .then(response => response.data);
 }
+
+export const getCountyByName = (name) => {
+    return axios
+        .get(`${baseUrl}/name/${name}`)
+        .then(response => response.data);
+}
