@@ -28,11 +28,16 @@ const persons = [
 
 app.get('/', (request, response) => {
     response.send('<h1>Welcome to the Phonebook API</h1>');
-})
+});
+
+app.get('/info', (request, response) => {
+    const infoText = `Phonebook has info for ${persons.length}</br> ${new Date()}`;
+    response.send(infoText);
+});
 
 app.get('/api/persons', (request, response) => {
     response.json(persons);
-})
+});
 
 const PORT = 3001;
 app.listen(PORT, () => {
