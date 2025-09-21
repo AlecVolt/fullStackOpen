@@ -6,16 +6,15 @@ app.use(express.json());
 const morgan = require('morgan');
 
 morgan.token('person', (request, response) => {
-    const person = persons.find(person => person.id === request.params.id);
-    return `{"name": ${person.name}, "number": ${person.number}}`;
+    return request.body && Object.keys(request.body).length
+    ? JSON.stringify(request.body)
+    : "";
+
 });
 
-app.use(morgan('tiny', {
-    skip: (request) => request.params.id !== undefined
-}));
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :person', {
-    skip: (request) => request.params.id === undefined
-}));
+// app.use(morgan('tiny'));
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :person'));
 
 let persons = [
     { 
