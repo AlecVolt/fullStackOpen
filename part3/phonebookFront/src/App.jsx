@@ -48,16 +48,24 @@ const App = () => {
     if (!existingPerson) {
       personService
         .addNewPerson(newPerson)
-        .then(returnedPerson => 
-          setPersons(persons.concat(returnedPerson))
-        );
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson));
+          setMessageStyle('notification');
+          setMessage(`Added ${newPerson.name}: ${newPerson.number}`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+        })
+        .catch(error => {
+          setMessageStyle('error');
+          setMessage(error.response.data.error);
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+        });
 
-      setMessageStyle('notification');
-      setMessage(`Added ${newPerson.name}: ${newPerson.number}`);
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
 
+      
     } else {
       if (existingPerson.name === newPerson.name) {
         if (!confirm(`${newPerson.name} is already added to phonebook, replace the old number with a new one?`)) {
@@ -75,7 +83,14 @@ const App = () => {
           .updatePerson(existingPerson.id, newPerson)
           .then(returnedPerson => 
             setPersons(persons.map(person => person.id === existingPerson.id ? returnedPerson : person))
-          );
+          )
+          .catch(error => {
+            setMessageStyle('error');
+            setMessage(error.response.data.error);
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
+          });
 
       setMessageStyle('notification');
       setMessage(`Contact changed`);

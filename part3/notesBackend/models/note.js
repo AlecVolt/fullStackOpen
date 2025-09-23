@@ -18,7 +18,11 @@ mongoose.connect(url)
 // const url = `mongodb+srv://foxavolt:${password}@cluster0.gpbq8tk.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0`;
 
 const noteSchema = new mongoose.Schema({
-  content: String,
+  content: {
+    type: String,
+    minLength: 5,
+    required: true,
+  },
   important: Boolean,
 });
 
