@@ -28,23 +28,17 @@ app.get('/api/persons', (request, response) => {
 app.get('/api/persons/:id', (request, response, next) => {
     Person.findById(request.params.id)
         .then(person => {
-            if (note) {
+            if (person) {
                 response.json(person);
             } else {
-                response.status(404).end();
+                response.status(404).json({ error : 'there is no such person'});
             }
         })
         .catch(error => next(error));
 });
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const body = request.body;
-
-    if (!body) {
-        return response.status(400).json(
-            { error: 'Content missing' }
-        );
-    }
 
     if (!body.name) {
         return response.status(400).json(
@@ -63,9 +57,10 @@ app.post('/api/persons', (request, response) => {
         number: body.number,
     });
 
-    person.save().then(savedPerson => {
-        response.json(savedPerson);
-    })
+    person.save()
+        .then(savedPerson => {
+            response.json(savedPerson);
+        });
 });
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -83,6 +78,7 @@ app.get('/info', (request, response) => {
 });
 
 const errorHandler = (error, request, response, next) => {
+    console.log('in error handler');
     console.error(error.message);
 
     if (error.name === 'CastError') {
