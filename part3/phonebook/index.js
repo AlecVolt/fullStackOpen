@@ -37,7 +37,7 @@ app.get('/api/persons/:id', (request, response, next) => {
         .catch(error => next(error));
 });
 
-app.post('/api/persons', (request, response, next) => {
+app.post('/api/persons', (request, response) => {
     const body = request.body;
 
     if (!body.name) {
@@ -61,6 +61,26 @@ app.post('/api/persons', (request, response, next) => {
         .then(savedPerson => {
             response.json(savedPerson);
         });
+
+});
+
+app.put('/api/persons/:id', (request, response, next) => {
+    const { name, number } = request.body;
+
+    Person.findById(request.params.id)
+        .then(person => {
+            if (!person) {
+                return response.status(404).end();
+            }
+
+            person.name = name;
+            person.number = number;
+
+            return person.save().then(updatedPerson => {
+                response.json(updatedPerson);
+            });
+        })
+        .catch(error => next(error));
 });
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -95,19 +115,6 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-// app.get('/', (request, response) => {
-//     response.send('<h1>Welcome to the Phonebook API</h1>');
-// });
-
-// app.get('/info', (request, response) => {
-//     const infoText = `Phonebook has info for ${persons.length}</br> ${new Date()}`;
-//     response.send(infoText);
-// });
-
-// app.get('/api/persons', (request, response) => {
-//     response.json(persons);
-// });
-
 // app.get('/api/persons/:id', (request, response) => {
 //     const id = request.params.id;
 
@@ -119,17 +126,6 @@ app.listen(PORT, () => {
 //         response.status(404).send('Person not found');
 //     }
 // });
-
-// app.delete('/api/persons/:id', (request, response) => {
-//     const id = request.params.id;
-//     persons = persons.filter(person => person.id !== id);
-
-//     response.status(204).end();
-// });
-
-// const generateId = () => {
-//     return String(Math.floor(Math.random() * 10000));
-// }
 
 // app.post('/api/persons', (request, response) => {
 //     const body = request.body;
