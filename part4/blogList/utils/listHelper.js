@@ -15,7 +15,7 @@ const favoriteBlog = (blogs) => {
   let favorite = {}
   
   for (const blog of blogs) {
-    if ( blog.likes > maxLikes) {
+    if (blog.likes > maxLikes) {
       maxLikes = blog.likes
       favorite = blog
     }
@@ -24,12 +24,10 @@ const favoriteBlog = (blogs) => {
   return favorite
 }
 
-const mostBlogs  = (blogs) => {
-  let authors = {}
+const mostBlogs = (blogs) => {
+  const authors = {}
 
   for (const blog of blogs) {
-    // authors = {...authors, [blog.author] : blog.author += 1 || 1}
-    // authors = [...authors, { name: blog.author, blogsNum: 1 }]
     authors[blog.author] = authors[blog.author] + 1 || 1
   }
 
@@ -37,7 +35,7 @@ const mostBlogs  = (blogs) => {
   let maxBlogs = 0
 
   for (const author of Object.keys(authors)) {
-    if ( authors[author] > maxBlogs ) {
+    if (authors[author] > maxBlogs) {
       authorMostBlogs.author = author
       authorMostBlogs.blogs = authors[author]
       maxBlogs = authors[author]
@@ -47,9 +45,31 @@ const mostBlogs  = (blogs) => {
   return authorMostBlogs
 }
 
+const mostLikes = (blogs) => {
+  const authors = {}
+
+  for (const blog of blogs) {
+    authors[blog.author] = authors[blog.author] + blog.likes || blog.likes
+  }
+
+  let authorMostLikes = {}
+  let maxLikes = 0
+
+  for (const author of Object.keys(authors)) {
+    if (authors[author] > maxLikes) {
+      authorMostLikes.author = author
+      authorMostLikes.likes = authors[author]
+      maxLikes = authors[author]
+    }
+  }
+
+  return authorMostLikes
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs 
+  mostBlogs,
+  mostLikes 
 }
