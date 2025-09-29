@@ -44,14 +44,14 @@ app.post('/api/notes', (request, response, next) => {
 
 app.delete('/api/notes/:id', (request, response, next) => {
   Note.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
 })
 
 app.put('/api/notes/:id', (request, response, next) => {
-  const { content, important} = request.body
+  const { content, important } = request.body
 
   Note.findById(request.params.id)
     .then(note => {
