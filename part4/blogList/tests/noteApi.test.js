@@ -107,43 +107,96 @@ describe('API tests', () => {
       assert.deepStrictEqual(savedBlogContent, newBlog)
     })
 
-    test('blog without likes can be added and the amount of likes will be 0', async () => {
-      const newBlog = {
-        author: "Jack Williams",
-        title: "async/await simplifies making async calls",
-        url: "http://blog.cleancoder.com/new-here/2017/05/05/TestDefinitions.htmll",
-      }
+    describe('missing property tests', () => {
+      test('blog without likes can be added and the amount of likes is 0', async () => {
+        const newBlog = {
+          author: "Jack Williams",
+          title: "async/await simplifies making async calls",
+          url: "http://blog.cleancoder.com/new-here/2017/05/05/TestDefinitions.htmll",
+        }
 
-      await api
-        .post('/api/blogs')
-        .send(newBlog)
-        .expect(201)
-        .expect('Content-Type', /application\/json/)
+        await api
+          .post('/api/blogs')
+          .send(newBlog)
+          .expect(201)
+          .expect('Content-Type', /application\/json/)
 
-      const blogsAtEnd = await helper.blogsInDb()
-      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
+        const blogsAtEnd = await helper.blogsInDb()
+        assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
 
-      const savedBlog = blogsAtEnd.find(e => e.title === newBlog.title)
-      const { likes: savedLikes } = savedBlog
+        const savedBlog = blogsAtEnd.find(e => e.title === newBlog.title)
+        const { likes: savedLikes } = savedBlog
 
-      assert.strictEqual(savedLikes, 0)
-    })
+        assert.strictEqual(savedLikes, 0)
+      })
 
-    test('blog without title is not added', async () => {
-      const newBlog = {
-        author: "Jack Williams",
-        url: "http://blog.cleancoder.com/here/2017/05/05/TestDefinitions.htmll",
-        likes: 5,
-      }
+      test('blog without title is not added', async () => {
+        const newBlog = {
+          author: "Jack Williams",
+          url: "http://blog.cleancoder.com/here/2017/05/05/TestDefinitions.htmll",
+          likes: 5,
+        }
 
-      await api
-        .post('/api/blogs')
-        .send(newBlog)
-        .expect(400)
+        await api
+          .post('/api/blogs')
+          .send(newBlog)
+          .expect(400)
 
-      const blogsAtEnd = await helper.blogsInDb()
+        const blogsAtEnd = await helper.blogsInDb()
 
-      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+        assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+      })
+
+      test('blog without url is not added', async ()  => {
+        const newBlog = {
+          author: "Jack Williams",
+          title: "Last man on the Earth",
+          likes: 15,
+        }
+
+        await api
+          .post('/api/blogs')
+          .send(newBlog)
+          .expect(400)
+
+        const blogsAtEnd = await helper.blogsInDb()
+
+        assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+      })
+
+      test('blog without title and url is not added', async () => {
+        const newBlog = {
+          author: "Jack Adams",
+          likes: 100
+        }
+
+        await api
+          .post('/api/blogs')
+          .send(newBlog)
+          .expect(400)
+
+        const blogsAtEnd = await helper.blogsInDb()
+
+        assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+      })
+
+      test('blog without author can be added', async () => {
+        const newBlog = {
+          title: "Last man on the Earth",
+          url: "http://blog.cleancoder.com/here/2017/05/05/TestDefinitions.htmll",
+          likes: 51,
+        }
+
+        await api
+          .post('/api/blogs')
+          .send(newBlog)
+          .expect(201)
+          .expect('Content-Type', /application\/json/)
+
+        const blogsAtEnd = await helper.blogsInDb()
+
+        assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
+      })
     })
   })
 
