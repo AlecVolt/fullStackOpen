@@ -33,12 +33,6 @@ describe('API tests', () => {
       assert.strictEqual(response.body.length, helper.initialBlogs.length)
     })
 
-    // test('all blogs are returned', async () => {
-    //   const response = await api.get('/api/blogs')
-
-    //   assert.strictEqual(response.body.length, helper.initialBlogs.length)
-    // })
-
     test('the unique identifier property of the blog posts is named id', async () => {
       const resultBlogs = await api.get('/api/blogs')
 
@@ -89,7 +83,7 @@ describe('API tests', () => {
   })
 
   describe('POST request tests', () => {
-    test('a valid blog can be added ', async () => {
+    test('a valid blog can be added and the content saved correctly', async () => {
       const newBlog = {
         author: "Jack Williams",
         title: "async/await simplifies making async calls",
@@ -106,9 +100,11 @@ describe('API tests', () => {
       const blogsAtEnd = await helper.blogsInDb()
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
 
-      const titles = blogsAtEnd.map(b => b.title)
+      const savedBlog = blogsAtEnd.find(e => e.title === newBlog.title)
+      
+      const {id, ...savedBlogContent} = savedBlog || {}
 
-      assert(titles.includes('async/await simplifies making async calls'))
+      assert.deepStrictEqual(savedBlogContent, newBlog)
     })
 
     test('blog without title is not added', async () => {
