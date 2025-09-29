@@ -25,12 +25,12 @@ describe('API tests', () => {
 
   describe('GET request tests', () => {
     test('blogs are returned as json and all blogs are returned', async () => {
-      const resultBlogs = await api
+      const response = await api
         .get('/api/blogs')
         .expect(200)
         .expect('Content-Type', /application\/json/)
 
-      assert.strictEqual(resultBlogs.body.length, helper.initialBlogs.length)
+      assert.strictEqual(response.body.length, helper.initialBlogs.length)
     })
 
     // test('all blogs are returned', async () => {
@@ -38,6 +38,34 @@ describe('API tests', () => {
 
     //   assert.strictEqual(response.body.length, helper.initialBlogs.length)
     // })
+
+    test('the unique identifier property of the blog posts is named id', async () => {
+      const resultBlogs = await api.get('/api/blogs')
+
+      let ids = 0
+
+      for (const blog of resultBlogs.body) {
+        if (Object.keys(blog).find(k => k === 'id')) {
+          ids++
+        }
+      }
+
+      assert.strictEqual(ids, helper.initialBlogs.length)
+    })
+
+    test('the unique identifier property of the blog posts is not named _id', async () => {
+      const resultBlogs = await api.get('/api/blogs')
+
+      let ids = 0
+
+      for (const blog of resultBlogs.body) {
+        if (Object.keys(blog).find(k => k === '_id')) {
+          ids++
+        }
+      }
+
+      assert.strictEqual(ids, 0)
+    })
 
     test('a specific title is within the returned blogs', async () => {
       const response = await api.get('/api/blogs')
