@@ -107,6 +107,28 @@ describe('API tests', () => {
       assert.deepStrictEqual(savedBlogContent, newBlog)
     })
 
+    test('blog without likes can be added and the amount of likes will be 0', async () => {
+      const newBlog = {
+        author: "Jack Williams",
+        title: "async/await simplifies making async calls",
+        url: "http://blog.cleancoder.com/new-here/2017/05/05/TestDefinitions.htmll",
+      }
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
+
+      const savedBlog = blogsAtEnd.find(e => e.title === newBlog.title)
+      const { likes: savedLikes } = savedBlog
+
+      assert.strictEqual(savedLikes, 0)
+    })
+
     test('blog without title is not added', async () => {
       const newBlog = {
         author: "Jack Williams",
