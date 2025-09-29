@@ -214,7 +214,7 @@ describe('API tests', () => {
       const titles = blogsAtEnd.map(e => e.title)
       assert(!titles.includes(blogToDelete.title))
 
-      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1) 
     })
   })
 
