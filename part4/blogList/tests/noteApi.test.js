@@ -200,6 +200,31 @@ describe('API tests', () => {
     })
   })
 
+  describe('PUT request tests', () => {
+    test('a blog can be updated', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToUpdate = blogsAtStart[0]
+
+      const newUpdateBlog = {
+        title: "React patterns",
+        author: "Michael Chan",
+        url: "https://reactpatterns.com/",
+        likes: 27,
+      }
+
+      await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .send(newUpdateBlog)
+        .expect(200)
+      
+      const blogsAtEnd = await helper.blogsInDb()
+      console.log(blogsAtEnd[0])
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+      assert.strictEqual(newUpdateBlog.likes, blogsAtEnd[0].likes)
+      assert.notStrictEqual(blogsAtStart[0].likes, blogsAtEnd[0].likes)
+    })
+  })
+
   describe('DELETE request tests', () => {
     test('a blog can be deleted', async () => {
       const blogsAtStart = await helper.blogsInDb()
