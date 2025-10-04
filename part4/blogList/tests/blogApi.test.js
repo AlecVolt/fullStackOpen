@@ -8,7 +8,7 @@ const Blog = require('../models/blog')
 
 const api = supertest(app)
 
-describe('API tests', () => {
+describe('blog API tests', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)
@@ -218,7 +218,6 @@ describe('API tests', () => {
         .expect(200)
       
       const blogsAtEnd = await helper.blogsInDb()
-      console.log(blogsAtEnd[0])
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
       assert.strictEqual(newUpdateBlog.likes, blogsAtEnd[0].likes)
       assert.notStrictEqual(blogsAtStart[0].likes, blogsAtEnd[0].likes)
