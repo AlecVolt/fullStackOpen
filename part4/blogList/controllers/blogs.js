@@ -3,15 +3,15 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
-const getTockenFrom = (request) => {
-  const authorization = request.get('authorization')
+// const getTockenFrom = (request) => {
+//   const authorization = request.get('authorization')
 
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
+//   if (authorization && authorization.startsWith('Bearer ')) {
+//     return authorization.replace('Bearer ', '')
+//   }
 
-  return null 
-}
+//   return null 
+// }
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -34,7 +34,8 @@ blogsRouter.post('/', async (request, response) => {
   const body = request.body
   // const blog = new Blog(request.body)
 
-  const decodedTocken = jwt.verify(getTockenFrom(request), process.env.SECRET)
+  // const decodedTocken = jwt.verify(getTockenFrom(request), process.env.SECRET)
+  const decodedTocken = jwt.verify(request.token, process.env.SECRET)
 
   if (!decodedTocken.id) {
     return response
