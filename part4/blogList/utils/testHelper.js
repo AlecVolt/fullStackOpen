@@ -53,14 +53,14 @@ const User = require('../models/user')
 // ]
 
 
-[
+const initialBlogs = [
   {
     "_id": "68e14397ec0d7ff27fc194ae",
     "title": "some title",
     "author": "some author",
     "url": "some url",
     "likes": 10,
-    "user": "68e13eb6eec9c3ed8ef31cfb",
+    "user": "68e3d520c11765176e3ead91",
     "__v": 0
   },
   {
@@ -69,7 +69,7 @@ const User = require('../models/user')
     "author": "some author",
     "url": "some new user url",
     "likes": 22,
-    "user": "68e13eb6eec9c3ed8ef31cfb",
+    "user": "68e3d520c11765176e3ead91",
     "__v": 0
   },
   {
@@ -78,7 +78,7 @@ const User = require('../models/user')
     "author": "some author",
     "url": "some new user url",
     "likes": 22,
-    "user": "68e13eb6eec9c3ed8ef31cfb",
+    "user": "68e3d520c11765176e3ead91",
     "__v": 0
   },
   {
@@ -87,7 +87,7 @@ const User = require('../models/user')
     "author": "some author",
     "url": "some new user url",
     "likes": 22,
-    "user": "68e13eb6eec9c3ed8ef31cfb",
+    "user": "68e3d520c11765176e3ead91",
     "__v": 0
   },
   {
@@ -96,7 +96,7 @@ const User = require('../models/user')
     "author": "some author",
     "url": "some new user url",
     "likes": 22,
-    "user": "68e13eb6eec9c3ed8ef31cfb",
+    "user": "68e3d520c11765176e3ead91",
     "__v": 0
   },
   {
@@ -105,7 +105,7 @@ const User = require('../models/user')
     "author": "some author",
     "url": "some new user url",
     "likes": 22,
-    "user": "68e13eb6eec9c3ed8ef31cfb",
+    "user": "68e3d520c11765176e3ead91",
     "__v": 0
   },
   {
@@ -166,14 +166,14 @@ const User = require('../models/user')
 
 const initialUsers = [
   {
-    "_id": "68e13eb6eec9c3ed8ef31cfb",
+    "_id": "68e3d520c11765176e3ead91",
     "username": "cris",
-    "name": "Poshel na",
-    "passwordHash": "$2b$10$.I3pm1vZatwy0c24ewoBoeLCPnDV3DAOncZ5KaLkGZqr5N3vTp9L.",
+    "name": "Cris P",
+    "passwordHash": "$2b$10$5pKyh7i27h2NN6FmejAWXuJmxC4/ZXf7s571Jg84kZIP3IHMUNX6O",
     "blogs": [
-      "68e14369ec0d7ff27fc194aa",
       "68e14397ec0d7ff27fc194ae",
       "68e2943934d85fe4f7ae749c",
+      "68e2943934d85fe4f7ae749e",
       "68e2944434d85fe4f7ae74a2",
       "68e2945b34d85fe4f7ae74a5",
       "68e294d934d85fe4f7ae74aa"
@@ -185,7 +185,9 @@ const initialUsers = [
     "username": "hellas",
     "name": "Arto Hellas",
     "passwordHash": "$2b$10$X.wVxX8cDzfQfbVk/uiV/OQeDMEGIrjiOUQNyEZMBdYFnjeVj6xca",
-    "blogs": [],
+    "blogs": [
+      "68e2978db3561ddcbd68ab9b"
+    ],
     "__v": 0
   },
   {
@@ -193,7 +195,10 @@ const initialUsers = [
     "username": "creatorPower",
     "name": "Creator Power",
     "passwordHash": "$2b$10$ggeHE1JW36sMKZaI52ob4Oc2NioZAD7i9c/usfwabCmM6PPeRY/RC",
-    "blogs": [],
+    "blogs": [
+      "68e2a85a6b6906d8158e98f6",
+      "68e2a8696b6906d8158e98fa"
+    ],
     "__v": 0
   },
   {
@@ -201,7 +206,11 @@ const initialUsers = [
     "username": "mark",
     "name": "Mark Jackson",
     "passwordHash": "$2b$10$WJLLE7URxPBp7Uef4mvk8eH/QgZjeHNjYoftmdtqFWVMy2kL6vMxS",
-    "blogs": [],
+    "blogs": [
+      "68e2a8836b6906d8158e9900",
+      "68e2a8986b6906d8158e9904",
+      "68e2a8b76b6906d8158e9908"
+    ],
     "__v": 0
   }
 ]
@@ -218,7 +227,9 @@ const nonExistingId = async () => {
 }
 
 const blogsInDb = async () => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog
+    .find({})
+    .populate('user', { username: 1, name: 1 })
   return blogs.map(blog => blog.toJSON())
 }
 

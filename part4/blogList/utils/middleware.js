@@ -25,9 +25,9 @@ const errorHandler = (error, request, response, next) => {
   } else if (error.name === 'MongoServerError' && error.message.includes('E11000 duplicate key error')) {
     return response.status(400).json({ error: 'expected `username` to be unique' })
   } else if (error.name === 'JsonWebTokenError') {
-    return response.status(401).json({ error: 'tocken invalid' })
+    return response.status(401).json({ error: 'token missing or invalid' })
   } else if (error.name === 'TokenExpiredError') {
-    return response.status(401).json({ error: 'tocken expired' })
+    return response.status(401).json({ error: 'token expired' })
   }
 
   next(error)
@@ -48,7 +48,7 @@ const userExtractor = async (request, response, next) => {
   if (!decodedTocken.id) {
     return response
       .status(401)
-      .json({ error: 'token invalid' })
+      .json({ error: 'token missing or invalid' })
   }
 
   const user = await User.findById(decodedTocken.id)

@@ -22,9 +22,9 @@ loginRouter.post('/', async (request, response) => {
     id: user._id,
   }
 
-  // const tocken = jwt.sign(userForTocken, process.env.SECRET)
+  // const token = jwt.sign(userForTocken, process.env.SECRET)
 
-  const tocken = jwt.sign(
+  const token = jwt.sign(
     userForTocken,
     process.env.SECRET,
     { expiresIn: 60 * 60 }
@@ -32,7 +32,7 @@ loginRouter.post('/', async (request, response) => {
 
   response
     .status(200)
-    .send({ tocken, username: user.username, name: user.name })
+    .send({ token, username: user.username, name: user.name })
 })
 
 module.exports = loginRouter
