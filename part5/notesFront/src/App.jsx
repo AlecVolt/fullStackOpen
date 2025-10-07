@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Footer from './components/Footer'
 import Note from './components/Note'
 import Notification from './components/Notification'
@@ -6,15 +6,17 @@ import loginService from './services/login'
 import noteService from './services/notes'
 import LoginForm from './components/LoginForm'
 import NoteForm from './components/NoteForm'
+import Toggable from './components/Toggable'
 
 const App = () => {
   const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+
+  const noteFormRef = useRef()
 
   useEffect(() => {
     noteService.getAll().then(initialNotes => {
@@ -31,16 +33,10 @@ const App = () => {
     }
   }, [])
 
-  const addNote = event => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: Math.random() > 0.5
-    }
-
+  const createNote = noteObject => {
+    noteFormRef.current.toggleVisibility()
     noteService.create(noteObject).then(returnedNote => {
       setNotes(notes.concat(returnedNote))
-      setNewNote('')
     })
   }
 
@@ -86,8 +82,9 @@ const App = () => {
     }
   }
 
-  const handleNoteChange = event => {
-    setNewNote(event.target.value)
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedNoteAppUser')
+    window.location.reload()
   }
 
   const notesToShow = showAll ? notes : notes.filter(note => note.important)
@@ -97,17 +94,32 @@ const App = () => {
       <h1>Notes</h1>
       <Notification message={errorMessage} />
 
-      {!user && <LoginForm handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword} />}
+      
+
+      {/* {!user && <LoginForm handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword} />} */}
+
+      {/* {!user && (
+        loginIsVisible
+          ? <>
+              <LoginForm handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword} />
+              <button onClick={() => setLoginVisible(false)}>cancel</button>
+            </>
+          : <button onClick={() => setLoginVisible(true)}>login</button>
+      )} */}
+
+      {!user && 
+        <Toggable buttonLabel="login">
+          <LoginForm handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword} />
+        </Toggable>
+      }
+
       {user && (
         <>
           <p>Hi, {user.name}! You are logged in</p>
-          <button onClick={() => {
-            window.localStorage.removeItem('loggedNoteAppUser')
-            window.location.reload()
-          }}>
-            LogOut
-          </button>
-          <NoteForm addNote={addNote} newNote={newNote} handleNoteChange={handleNoteChange} />
+          <button onClick={handleLogout}>LogOut</button>
+          <Toggable buttonLabel="new note" ref={noteFormRef}>
+            <NoteForm createNote={createNote} />
+          </Toggable>
         </>
       )}
 
