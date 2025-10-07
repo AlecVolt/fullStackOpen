@@ -5,6 +5,7 @@ import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogsList'
 import CreateBlogForm from './components/CreateBlogForm'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -12,6 +13,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' })
+  const [notification, setNotification] = useState({ message: null, messageStyle: 'notification' })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,8 +46,22 @@ const App = () => {
       setUsername('')
       setPassword('')
       blogService.setToken(user.token)
+
+      setNotification({
+        message: `Welcome back, ${user.name}`,
+        messageStyle: 'notification'
+      })
+      setTimeout(() => {
+        setNotification({ message: null })
+      }, 5000)
     } catch {
-      console.error('wrong credentials')
+      setNotification({
+        message: 'wrong username or password',
+        messageStyle: 'error'
+      })
+      setTimeout(() => {
+        setNotification({ message: null })
+      }, 5000)
     }
   }
 
@@ -64,14 +80,39 @@ const App = () => {
       url: newBlog.url
     }
 
-    const returnedBlog = await blogService.create(newBlogObject)
-    setBlogs(blogs.concat(returnedBlog))
-    setNewBlog({ title: '', author: '', url: '' })
+    try {
+      const returnedBlog = await blogService.create(newBlogObject)
+
+      setBlogs(blogs.concat(returnedBlog))
+      setNewBlog({ title: '', author: '', url: '' })
+
+      setNotification({
+        message: `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
+        messageStyle: 'notification'
+      })
+      setTimeout(() => {
+        setNotification({ message: null })
+      }, 5000)
+    } catch {
+      setNotification({
+        message: 'Sorry your blog was not added',
+        messageStyle: 'error'
+      })
+      setTimeout(() => {
+        setNotification({ message: null })
+      }, 5000)
+    }
   }
 
   return (
     <>
+      <Notification 
+        message={notification.message} 
+        messageStyle={notification.messageStyle} 
+      />
+
       {!user && 
+
         <LoginForm 
           handleLogin={handleLogin} 
           username={username} 
@@ -80,9 +121,9 @@ const App = () => {
           setPassword={setPassword} 
         />
       }
+
       {user && (
         <>
-          <h2>Hi, {user.name}!</h2>
           <button onClick={handleLogout}>logout</button>
           <CreateBlogForm 
             handleCreateBlog={handleCreateBlog} 
