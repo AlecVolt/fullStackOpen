@@ -149,6 +149,7 @@ const App = () => {
           </Toggable>
           <BlogList 
             blogs={blogs} 
+            setBlogs={setBlogs}
             updateLike={updateLike}
           />
         </>
