@@ -10,8 +10,6 @@ const Blog = ({ blog, updateLike }) => {
   const handleAddLike = () => {
     const updatedBlog = { ...blog, likes: blog.likes + 1 }
 
-    console.log('updatedBlog:', updatedBlog)
-
     updateLike(blog.id, updatedBlog)
   }
 
