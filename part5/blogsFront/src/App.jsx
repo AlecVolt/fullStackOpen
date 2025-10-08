@@ -122,6 +122,30 @@ const App = () => {
     }
   }
 
+  const deleteBlog = async (id) => {
+    try {
+      await blogService.remove(id)
+
+      setBlogs(blogs.filter(blog => blog.id !== id))
+
+      setNotification({
+        message: 'Blog was deleted',
+        messageStyle: 'notification'
+      })
+      setTimeout(() => {
+        setNotification({ message: null })
+      }, 5000)
+    } catch {
+      setNotification({
+        message: 'Sorry blog was not deleted',
+        messageStyle: 'error'
+      })
+      setTimeout(() => {
+        setNotification({ message: null })
+      }, 5000)
+    }
+  }
+
   return (
     <>
       <Notification 
@@ -150,7 +174,9 @@ const App = () => {
           <BlogList 
             blogs={blogs} 
             setBlogs={setBlogs}
+            user={user}
             updateLike={updateLike}
+            deleteBlog={deleteBlog}
           />
         </>
       )}
