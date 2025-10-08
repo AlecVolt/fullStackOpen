@@ -22,7 +22,7 @@ const App = () => {
       setBlogs(blogs)
     }
 
-    fetchData()  
+    fetchData()
   }, [])
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const App = () => {
     event.preventDefault()
 
     try {
-      const user = await loginService.login({ username, password})
+      const user = await loginService.login({ username, password })
 
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
 
@@ -148,18 +148,18 @@ const App = () => {
 
   return (
     <>
-      <Notification 
-        message={notification.message} 
-        messageStyle={notification.messageStyle} 
+      <Notification
+        message={notification.message}
+        messageStyle={notification.messageStyle}
       />
 
-      {!user && 
-        <LoginForm 
-          handleLogin={handleLogin} 
-          username={username} 
-          setUsername={setUsername} 
-          password={password} 
-          setPassword={setPassword} 
+      {!user &&
+        <LoginForm
+          handleLogin={handleLogin}
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
         />
       }
 
@@ -167,12 +167,12 @@ const App = () => {
         <>
           <button onClick={handleLogout}>logout</button>
           <Toggable buttonLabel='new blog' ref={createBlogFormRef}>
-            <CreateBlogForm 
+            <CreateBlogForm
               createBlog={createBlog}
             />
           </Toggable>
-          <BlogList 
-            blogs={blogs} 
+          <BlogList
+            blogs={blogs}
             setBlogs={setBlogs}
             user={user}
             updateLike={updateLike}

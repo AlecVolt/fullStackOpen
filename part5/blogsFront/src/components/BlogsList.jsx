@@ -1,4 +1,4 @@
-import Blog from "./Blog"
+import Blog from './Blog'
 
 const BlogList = ({ blogs, setBlogs, updateLike, user, deleteBlog }) => {
   const sortByLikesHighest = () => {
@@ -18,11 +18,11 @@ const BlogList = ({ blogs, setBlogs, updateLike, user, deleteBlog }) => {
       <button type="button" onClick={sortByLikesLowest}>Order by likes (lowest first)</button>
 
       {blogs.map(blog =>
-        <Blog 
-          key={blog.id} 
-          blog={blog} 
-          updateLike={updateLike} 
-          user={user} 
+        <Blog
+          key={blog.id}
+          blog={blog}
+          updateLike={updateLike}
+          user={user}
           deleteBlog={deleteBlog}
         />
       )}
