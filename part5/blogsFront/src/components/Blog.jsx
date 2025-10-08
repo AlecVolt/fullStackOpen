@@ -1,11 +1,18 @@
 import { useState } from 'react'
 import './blog.css'
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateLike }) => {
   const [isView, setIsView] = useState(false)
   const buttonLabel = isView ? 'hide' : 'view'
   
   const toggleIsView = () => {
     setIsView(prev => !prev)
+  }
+  const handleAddLike = () => {
+    const updatedBlog = { ...blog, likes: blog.likes + 1 }
+
+    console.log('updatedBlog:', updatedBlog)
+
+    updateLike(blog.id, updatedBlog)
   }
 
   return (
@@ -17,7 +24,10 @@ const Blog = ({ blog }) => {
       
       {isView && <>
         <p>{blog.url}</p>
-        <p>likes {blog.likes}</p>
+        <p>
+          likes {blog.likes}
+          <button className='button' onClick={handleAddLike}>like</button>
+        </p>
         <p>{blog.user?.name}</p>
       </>}
     </div>  

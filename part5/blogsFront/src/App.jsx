@@ -98,6 +98,30 @@ const App = () => {
     }
   }
 
+  const updateLike = async (id, updatedBlogObject) => {
+    try {
+      const updatedBlog = await blogService.update(id, updatedBlogObject)
+
+      setBlogs(blogs.map(blog => blog.id !== id ? blog : updatedBlog))
+
+      setNotification({
+        message: `Blog ${updatedBlog.title} by ${updatedBlog.author} updated`,
+        messageStyle: 'notification'
+      })
+      setTimeout(() => {
+        setNotification({ message: null })
+      }, 5000)
+    } catch {
+      setNotification({
+        message: 'Sorry blog was not updated',
+        messageStyle: 'error'
+      })
+      setTimeout(() => {
+        setNotification({ message: null })
+      }, 5000)
+    }
+  }
+
   return (
     <>
       <Notification 
@@ -123,7 +147,10 @@ const App = () => {
               createBlog={createBlog}
             />
           </Toggable>
-          <BlogList blogs={blogs} />
+          <BlogList 
+            blogs={blogs} 
+            updateLike={updateLike}
+          />
         </>
       )}
     </>
