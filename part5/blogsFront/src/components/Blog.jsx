@@ -23,16 +23,17 @@ const Blog = ({ blog, updateLike, user, deleteBlog }) => {
   return (
     <div className='blogItem'>
       <p>
-        "{blog.title}" by {blog.author}
+        "<span className='blogTitle'>{blog.title}</span>"
+        by <span className='blogAuthor'>{blog.author}</span>
         <button className='button' onClick={toggleIsView}>{buttonLabel}</button>
       </p>
       {isView && <>
-        <p>{blog.url}</p>
-        <p>
+        <p className='blogUrl'>{blog.url}</p>
+        <p className='blogLikes'>
           likes {blog.likes}
           <button className='button' onClick={handleAddLike}>like</button>
         </p>
-        <p>{blog.user?.name}</p>
+        <p className='blogUser'>{blog.user?.name}</p>
         {user && blog.user && user.username === blog.user.username &&
           <button className='button' onClick={handleDeleteBlog}>delete blog</button>
         }
