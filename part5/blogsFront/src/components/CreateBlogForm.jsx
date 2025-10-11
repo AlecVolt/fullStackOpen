@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 const CreateBlogForm = ({ createBlog }) => {
   const initialBlogState = { title: '', author: '', url: '' }
@@ -21,9 +21,7 @@ const CreateBlogForm = ({ createBlog }) => {
             <input
               type="text"
               value={newBlog.title}
-              onChange={({ target }) => 
-                setNewBlog(prev => ({ ...prev, title: target.value }))
-            }
+              onChange={({ target }) => setNewBlog(prev => ({ ...prev, title: target.value }))}
             />
           </label>
         </div>
@@ -33,9 +31,7 @@ const CreateBlogForm = ({ createBlog }) => {
             <input
               type="text"
               value={newBlog.author}
-              onChange={({ target }) => 
-                setNewBlog(prev => ({ ...prev, author: target.value }))
-            }
+              onChange={({ target }) => setNewBlog(prev => ({ ...prev, author: target.value }))}
             />
           </label>
         </div>
@@ -45,9 +41,7 @@ const CreateBlogForm = ({ createBlog }) => {
             <input
               type="text"
               value={newBlog.url}
-              onChange={({ target }) => 
-                setNewBlog(prev => ({ ...prev, url: target.value }))
-            }
+              onChange={({ target }) => setNewBlog(prev => ({ ...prev, url: target.value }))}
             />
           </label>
         </div>
