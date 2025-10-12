@@ -1,4 +1,5 @@
 const { test, expect, describe, beforeEach } = require('@playwright/test')
+const { loginWith } = require('./helper')
 
 describe('Blogs App', () => {
   beforeEach(async ({ page, request }) => {
@@ -26,17 +27,31 @@ describe('Blogs App', () => {
 
   describe('Login', () => {
     test('succeeds with correct credentials', async ({ page }) => {
-      await page.getByLabel('username').fill('cris')
-      await page.getByLabel('password').fill('salainen')
-      await page.getByRole('button', { name: 'login' }).click()
+      await loginWith(page, 'cris', 'salainen')
       await expect(page.getByText('Welcome back, Cris Jackson')).toBeVisible()
     })
 
     test('fails with wrong credentials', async ({ page }) => {
-      await page.getByLabel('username').fill('cris')
-      await page.getByLabel('password').fill('wroong')
-      await page.getByRole('button', { name: 'login' }).click()
+      await loginWith(page, 'cris', 'wroong')
       await expect(page.getByText('wrong username or password')).toBeVisible()
+    })
+  })
+
+  describe('When logged in', () => {
+    beforeEach(async ({ page }) => {
+      await loginWith(page, 'cris', 'salainen')
+    })
+
+    test('a new blog can be created', async ({ page }) => {
+      await page.getByRole('button', { name: 'new blog'}).click()
+
+      await page.getByLabel('title:').fill('new title by playwright')
+      await page.getByLabel('author:').fill('new author by playwright')
+      await page.getByLabel('url:').fill('new url by playwright')
+
+      await page.getByRole('button', { name: 'add new blog' }).click()
+
+      await expect(page.getByText('"new title by playwright" by new author by playwright')).toBeVisible()
     })
   })
 })
