@@ -41,7 +41,7 @@ notesRouter.post('/', async (request, response) => {
 
   const note = new Note({
     content: body.content,
-    important: body.important || false,
+    important: body.important || true,
     user: user._id
   })
 
