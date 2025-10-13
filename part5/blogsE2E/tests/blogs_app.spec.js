@@ -1,5 +1,5 @@
 const { test, expect, describe, beforeEach } = require('@playwright/test')
-const { loginWith } = require('./helper')
+const { loginWith, createBlog } = require('./helper')
 
 describe('Blogs App', () => {
   beforeEach(async ({ page, request }) => {
@@ -43,15 +43,28 @@ describe('Blogs App', () => {
     })
 
     test('a new blog can be created', async ({ page }) => {
-      await page.getByRole('button', { name: 'new blog'}).click()
-
-      await page.getByLabel('title:').fill('new title by playwright')
-      await page.getByLabel('author:').fill('new author by playwright')
-      await page.getByLabel('url:').fill('new url by playwright')
-
-      await page.getByRole('button', { name: 'add new blog' }).click()
+      await createBlog(page, 'new title by playwright', 'new author by playwright', 'new url by playwright')
 
       await expect(page.getByText('"new title by playwright" by new author by playwright')).toBeVisible()
     })
+
+    describe('When a note exists', () => {
+      beforeEach(async ({ page }) => {
+        await createBlog(page, 'new title by playwright', 'new author by playwright', 'new url by playwright')
+      })
+
+      test('a blog can be liked', async ({ page }) => {
+        await page.getByRole('button', { name: 'view' }).click()
+        await page.getByRole('button', { name: 'like me' }).click()
+
+        const likes = page.locator('.likesNum')
+        await expect(likes).toContainText('1')
+
+        await page.getByRole('button', { name: 'like me' }).click()
+        await expect(likes).toContainText('2')
+      })
+    })
+
+
   })
 })

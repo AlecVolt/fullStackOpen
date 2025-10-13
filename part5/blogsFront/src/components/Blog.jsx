@@ -30,7 +30,7 @@ const Blog = ({ blog, updateLike, user, deleteBlog }) => {
       {isView && <>
         <p className='blogUrl'>{blog.url}</p>
         <p className='blogLikes'>
-          likes {blog.likes}
+          likes <span className='likesNum'>{blog.likes}</span>
           <button className='button' onClick={handleAddLike}>like me</button>
         </p>
         <p className='blogUser'>{blog.user?.name}</p>
