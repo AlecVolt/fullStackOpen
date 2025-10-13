@@ -82,10 +82,11 @@ describe('Blogs App', () => {
         await page.getByRole('button', { name: 'view' }).click()
         
         await expect(page.getByRole('button', { name: 'delete blog' })).toBeVisible()
-
+        
         await page.getByRole('button', { name: 'logout' }).click()
         await loginWith(page, 'edward', 'pawwword')
         await page.getByRole('button', { name: 'view' }).click()
+
         await expect(page.getByRole('button', { name: 'delete blog' })).not.toBeVisible()
       })
 
