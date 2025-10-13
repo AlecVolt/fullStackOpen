@@ -16,10 +16,15 @@ const App = () => {
 
   const createBlogFormRef = useRef()
 
+  const sortBlogs = (blogs) => {
+    const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
+    return sortedBlogs
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       const blogs = await blogService.getAll()
-      setBlogs(blogs)
+      setBlogs(sortBlogs(blogs))
     }
 
     fetchData()
@@ -76,7 +81,7 @@ const App = () => {
     try {
       const returnedBlog = await blogService.create(newBlogObject)
 
-      setBlogs(blogs.concat(returnedBlog))
+      setBlogs(sortBlogs(blogs.concat(returnedBlog)))
 
       createBlogFormRef.current.toggleIsVisible()
 
@@ -102,15 +107,15 @@ const App = () => {
     try {
       const updatedBlog = await blogService.update(id, updatedBlogObject)
 
-      setBlogs(blogs.map(blog => blog.id !== id ? blog : updatedBlog))
+      setBlogs(sortBlogs(blogs.map(blog => blog.id !== id ? blog : updatedBlog)))
 
-      setNotification({
-        message: `Blog ${updatedBlog.title} by ${updatedBlog.author} updated`,
-        messageStyle: 'notification'
-      })
-      setTimeout(() => {
-        setNotification({ message: null })
-      }, 5000)
+      // setNotification({
+      //   message: `Blog ${updatedBlog.title} by ${updatedBlog.author} updated`,
+      //   messageStyle: 'notification'
+      // })
+      // setTimeout(() => {
+      //   setNotification({ message: null })
+      // }, 5000)
     } catch {
       setNotification({
         message: 'Sorry blog was not updated',
@@ -126,7 +131,7 @@ const App = () => {
     try {
       await blogService.remove(id)
 
-      setBlogs(blogs.filter(blog => blog.id !== id))
+      setBlogs(sortBlogs(blogs.filter(blog => blog.id !== id)))
 
       setNotification({
         message: 'Blog was deleted',

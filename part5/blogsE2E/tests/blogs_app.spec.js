@@ -82,7 +82,7 @@ describe('Blogs App', () => {
         await page.getByRole('button', { name: 'view' }).click()
         
         await expect(page.getByRole('button', { name: 'delete blog' })).toBeVisible()
-        
+
         await page.getByRole('button', { name: 'logout' }).click()
         await loginWith(page, 'edward', 'pawwword')
         await page.getByRole('button', { name: 'view' }).click()
@@ -113,6 +113,126 @@ describe('Blogs App', () => {
       })
     })
 
+  })
 
+  describe('When more blogs exists', () => {
+    beforeEach(async ({ page, request }) => {
+      const loginResponse = await request.post('/api/login', {
+        data: {
+          username: 'cris',
+          password: 'salainen'
+        }
+      })
+
+      const { token } = await loginResponse.json()
+
+      await request.post('/api/blogs', {
+        data: {
+          title: 'title 1',
+          author: 'author 1',
+          url: 'ulr 1',
+          likes: 10
+        },
+        headers: { Authorization: `Bearer ${token}` }
+      })
+
+      await request.post('/api/blogs', {
+        data: {
+          title: 'title 2',
+          author: 'author 2',
+          url: 'ulr 2',
+          likes: 12
+        },
+        headers: { Authorization: `Bearer ${token}` }
+      })
+
+      await request.post('/api/blogs', {
+        data: {
+          title: 'title 3',
+          author: 'author 3',
+          url: 'ulr 3',
+          likes: 1
+        },
+        headers: { Authorization: `Bearer ${token}` }
+      })
+
+      await request.post('/api/blogs', {
+        data: {
+          title: 'title 4',
+          author: 'author 4',
+          url: 'ulr 4',
+          likes: 28
+        },
+        headers: { Authorization: `Bearer ${token}` }
+      })
+
+      await page.goto('/')
+      await loginWith(page, 'cris', 'salainen')
+    })
+
+    test('blogs are existing', async ({ page }) => {
+      await expect(page.getByText('"title 1" by author 1')).toBeVisible()
+      await expect(page.getByText('"title 2" by author 2')).toBeVisible()
+      await expect(page.getByText('"title 3" by author 3')).toBeVisible()
+      await expect(page.getByText('"title 4" by author 4')).toBeVisible()
+    })
+
+    test('blogs are arranged in the order according to the likes (highest first)', async ({ page }) => {
+      const blogItems = await page.locator('.blogItem').all()
+      
+      for (const blog of blogItems) {
+        await blog.getByRole('button', { name: 'view' }).click()
+      }
+
+      const likes = []
+      for (const blog of blogItems) {
+        const likesAmount = await blog.locator('.likesNum').innerText()
+        likes.push(Number(likesAmount))
+      }
+
+      const sorted = [...likes].sort((a, b) => b - a)
+
+      expect(likes).toEqual(sorted)
+    })
+
+    test('blogs are arranged in the order according to the likes after clicking Order by likes (lowest first)', async ({ page }) => {
+      await page.getByRole('button', { name: 'Order by likes (lowest first)' }).click()
+
+      const blogItems = await page.locator('.blogItem').all()
+
+      for (const blog of blogItems) {
+        await blog.getByRole('button', { name: 'view' }).click()
+      }
+
+      const likes = []
+      for (const blog of blogItems) {
+        const likesAmount = await blog.locator('.likesNum').innerText()
+        likes.push(Number(likesAmount))
+      }
+
+      const sorted = [...likes].sort((a, b) => a - b)
+
+      expect(likes).toEqual(sorted)
+    })
+    test('blogs are arranged in the order according to the likes after clicking Order by likes (highest first)', async ({ page }) => {
+      await page.getByRole('button', { name: 'Order by likes (lowest first)' }).click()
+      await page.getByRole('button', { name: 'Order by likes (highest first)' }).click()
+
+      const blogItems = await page.locator('.blogItem').all()
+      
+      for (const blog of blogItems) {
+        await blog.getByRole('button', { name: 'view' }).click()
+      }
+
+      const likes = []
+      for (const blog of blogItems) {
+        const likesAmount = await blog.locator('.likesNum').innerText()
+        likes.push(Number(likesAmount))
+      }
+
+      const sorted = [...likes].sort((a, b) => b - a)
+
+      expect(likes).toEqual(sorted)
+    })
   })
 })
