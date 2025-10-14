@@ -50,7 +50,7 @@ const anecdoteReducer = (state = [...initialAnecdotes], action) => {
   }
 }
 
-const generateId = () => Number(Math.random() * 100000)
+const generateId = () => Number(Math.random() * 100000) 
 
 export const createAnecdote = (text) => {
   return {
