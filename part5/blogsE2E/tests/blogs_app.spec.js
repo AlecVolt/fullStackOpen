@@ -214,6 +214,7 @@ describe('Blogs App', () => {
 
       expect(likes).toEqual(sorted)
     })
+    
     test('blogs are arranged in the order according to the likes after clicking Order by likes (highest first)', async ({ page }) => {
       await page.getByRole('button', { name: 'Order by likes (lowest first)' }).click()
       await page.getByRole('button', { name: 'Order by likes (highest first)' }).click()
