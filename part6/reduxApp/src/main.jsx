@@ -17,7 +17,7 @@ store.dispatch({
 
 store.dispatch({
   type: 'NEW_NOTE',
-  payload: {
+  payload: { 
     content: 'state changes are made with actions',
     important: false,
     id: 2
