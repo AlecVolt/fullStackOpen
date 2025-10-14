@@ -1,3 +1,4 @@
+import AddAnecdoteForm from "./components/AddAnecdoteForm";
 import AnecdotesList from "./components/AnecdotesList";
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
   return (
     <>
       <h2>Anecdote of the day</h2>
+      <AddAnecdoteForm />
       <AnecdotesList />
       {/* <p>{anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>

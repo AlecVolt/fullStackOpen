@@ -28,6 +28,8 @@ const initialAnecdotes = [
 
 const anecdoteReducer = (state = [...initialAnecdotes], action) => {
   switch (action.type) {
+    case 'NEW_ANECDOTE':
+      return [...state, action.payload]
     case 'ADD_VOTE': {
       const id = action.payload.id
       const anecdoteToChange = state.find(anecdote => anecdote.id === id)
@@ -44,7 +46,18 @@ const anecdoteReducer = (state = [...initialAnecdotes], action) => {
   }
 }
 
-// const generateId = () => Number(Math.random() * 100000)
+const generateId = () => Number(Math.random() * 100000)
+
+export const createAnecdote = (text) => {
+  return {
+    type: 'NEW_ANECDOTE',
+    payload: {
+      text,
+      votes: 0,
+      id: generateId()
+    }
+  }
+}
 
 export const addVote = (id) => {
   return {
