@@ -52,6 +52,10 @@ const App = ({ store }) => {
     store.dispatch({ type: 'BAD' })
   }
 
+  const makeReset = () => {
+    store.dispatch({ type: 'RESET' })
+  }
+
   return (
     <>
       <h2>give feedback</h2>
@@ -59,6 +63,7 @@ const App = ({ store }) => {
         <AddButton onClick={addGood} text={'good'} />
         <AddButton onClick={addOk} text={'ok'} />
         <AddButton onClick={addBad} text={'bad'} />
+        <AddButton onClick={makeReset} text={'reset'} />
       </div>
 
       <Statistics good={store.getState().good} ok={store.getState().ok} bad={store.getState().bad} />
@@ -67,4 +72,4 @@ const App = ({ store }) => {
 
 }
 
-export default App;
+export default App
