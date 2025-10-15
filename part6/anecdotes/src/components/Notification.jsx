@@ -1,5 +1,4 @@
-import { useDispatch, useSelector } from "react-redux"
-import { notificationChange } from "../reducers/notificationReducer"
+import { useSelector } from "react-redux"
 
 const Notification = () => {
   const style = {
@@ -9,12 +8,12 @@ const Notification = () => {
     marginBottom: 10
   }
 
-  const dispatch = useDispatch()
-
   const notificationText = useSelector(store => store.notification)
 
+  if (notificationText === 'NO') return null
+
   return (
-    <div style={style} onClick={() => dispatch(notificationChange('You\'ve clicked'))}>
+    <div style={style} >
       {notificationText}
     </div>
   )

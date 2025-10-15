@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { addVote } from '../reducers/anecdoteReducer'
 import Anecdote from './Anecdote'
+import { setNotification } from '../reducers/notificationReducer'
 
 const AnecdotesList = () => {
   const dispatch = useDispatch()
-  // const anecdotes = useSelector(state => state.anecdotes)
   
   const anecdotes = useSelector(({ filter, anecdotes }) => {
     if (filter === 'ALL' ) {
@@ -14,13 +14,19 @@ const AnecdotesList = () => {
     return anecdotes.filter(anecdote => anecdote.text.toLowerCase().includes(filter))
   })
 
+  const handleVote = (anecdote) => {
+    dispatch(addVote(anecdote.id))
+    dispatch(setNotification(anecdote.text))
+  }
+
   return (
     <ul>
       {anecdotes.map(anecdote => (
         <Anecdote 
           key={anecdote.id}
           anecdote={anecdote}
-          handleClick={() => dispatch(addVote(anecdote.id))}
+          // handleClick={() => dispatch(addVote(anecdote.id))}
+          handleClick={() => handleVote(anecdote)}
         />
       ))}
     </ul>
