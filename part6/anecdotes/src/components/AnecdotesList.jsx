@@ -4,7 +4,15 @@ import Anecdote from './Anecdote'
 
 const AnecdotesList = () => {
   const dispatch = useDispatch()
-  const anecdotes = useSelector(state => state)
+  // const anecdotes = useSelector(state => state.anecdotes)
+  
+  const anecdotes = useSelector(({ filter, anecdotes }) => {
+    if (filter === 'ALL' ) {
+      return anecdotes
+    }
+
+    return anecdotes.filter(anecdote => anecdote.text.toLowerCase().includes(filter))
+  })
 
   return (
     <ul>

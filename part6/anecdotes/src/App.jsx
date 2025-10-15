@@ -1,5 +1,6 @@
-import AddAnecdoteForm from "./components/AddAnecdoteForm";
+import Filter from "./components/Filter";
 import AnecdotesList from "./components/AnecdotesList";
+import AddAnecdoteForm from "./components/AddAnecdoteForm";
 
 function App() {
   // const showMostVotesAnecdote = () => {
@@ -15,8 +16,11 @@ function App() {
   return (
     <>
       <h2>Anecdotes</h2>
-      <AddAnecdoteForm />
+      <Filter />
       <AnecdotesList />
+
+      <h2>Add new</h2>
+      <AddAnecdoteForm />
     </>
   )
 }
