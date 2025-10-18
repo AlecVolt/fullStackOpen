@@ -1,7 +1,13 @@
-import Filter from "./components/Filter";
-import AnecdotesList from "./components/AnecdotesList";
-import AddAnecdoteForm from "./components/AddAnecdoteForm";
-import Notification from "./components/Notification";
+import Filter from "./components/Filter"
+import AnecdotesList from "./components/AnecdotesList"
+import AddAnecdoteForm from "./components/AddAnecdoteForm"
+import Notification from "./components/Notification"
+
+import { useDispatch } from "react-redux"
+import { useEffect } from "react"
+
+import { setAnecdotes } from './reducers/anecdoteReducer'
+import anecdotesService from './services/anecdotes'
 
 function App() {
   // const showMostVotesAnecdote = () => {
@@ -13,6 +19,12 @@ function App() {
   //     </>
   //   );
   // }
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    anecdotesService.getAll().then(anecdotes => dispatch(setAnecdotes(anecdotes)))
+  }, [dispatch])
 
   return (
     <>
