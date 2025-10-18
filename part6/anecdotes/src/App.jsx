@@ -6,8 +6,7 @@ import Notification from "./components/Notification"
 import { useDispatch } from "react-redux"
 import { useEffect } from "react"
 
-import { setAnecdotes } from './reducers/anecdoteReducer'
-import anecdotesService from './services/anecdotes'
+import { initializeAnecdotes } from "./reducers/anecdoteReducer"
 
 function App() {
   // const showMostVotesAnecdote = () => {
@@ -23,7 +22,7 @@ function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    anecdotesService.getAll().then(anecdotes => dispatch(setAnecdotes(anecdotes)))
+    dispatch(initializeAnecdotes())
   }, [dispatch])
 
   return (
