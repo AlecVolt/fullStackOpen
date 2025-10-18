@@ -8,6 +8,10 @@ const AnecdoteForm = ({ notificationDispatch }) => {
     mutationFn: createAnecdote,
     onSuccess: (newAnecdote) => {
       queryClient.setQueryData(['anecdotes'], (old = []) => old.concat(newAnecdote))
+    },
+    onError: () => {
+      notificationDispatch({ type: 'NEW_ERR' })
+      setTimeout(() => {notificationDispatch({ type: 'HIDE' })}, 5000)
     }
   })
 
