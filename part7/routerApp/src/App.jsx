@@ -10,6 +10,8 @@ import {
   useNavigate,
   useMatch,
 } from "react-router-dom"
+import Counter from './Counter'
+import Form from './Form'
 
 
 const Home = () => (
@@ -128,9 +130,13 @@ const App = () => {
           ? <em>{user} logged in</em>
           : <Link style={padding} to="/login">login</Link>
         }
+        <Link style={padding} to='/counter'>counter</Link>
+        <Link style={padding} to='/form'>form</Link>
       </div>
 
       <Routes>
+        <Route path='/counter' element={<Counter />} />
+        <Route path='/form' element={<Form />} />
         <Route path="/notes/:id" element={<Note note={note} />} />
         <Route path="/notes" element={<Notes notes={notes} />} />
         <Route path="/users" element={user ? <Users /> : <Navigate replace to="/login" />} />
