@@ -1,13 +1,13 @@
 import { useField } from "./hooks/useField"
 
-const Form = () => {
+const FieldForm = () => {
   const name = useField('text')
   const born = useField('date')
   const height = useField('number')
 
   return (
     <div>
-      <form>
+      <FieldForm>
         name: 
         <input
           {...name}
@@ -22,7 +22,7 @@ const Form = () => {
         <input
           {...height}
         />
-      </form>
+      </FieldForm>
       <div>
         {name.value} {born.value} {height.value} 
       </div>
@@ -30,4 +30,4 @@ const Form = () => {
   )
 }
 
-export default Form
+export default FieldForm
