@@ -16,6 +16,36 @@ import { Table, Form, Button, Alert, Navbar, Nav } from 'react-bootstrap'
 import Counter from './Counter'
 import FieldForm from './FieldForm'
 
+import styled from 'styled-components'
+
+const StyledButton = styled.button`
+  background: Bisque;
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid Chocolate;
+  border-radius: 3px;
+`
+
+const StyledInput = styled.input`
+  margin: 0.25em;
+`
+
+const StyledPage = styled.div`
+  padding: 1em;
+  background: papayawhip;
+`
+
+const StyledNavigation = styled.div`
+  background: BurlyWood;
+  padding: 1em;
+`
+
+const StyledFooter = styled.div`
+  background: Chocolate;
+  padding: 1em;
+  margin-top: 1em;
+`
 
 const Home = () => (
   <div>
@@ -87,7 +117,7 @@ const Login = (props) => {
     <div>
       <h2>login</h2>
 
-      <Form onSubmit={onSubmit}>
+      {/* <Form onSubmit={onSubmit}>
         <Form.Group>
           <Form.Label>username: </Form.Label>
           <Form.Control 
@@ -103,17 +133,17 @@ const Login = (props) => {
           />
         </Form.Group>
         <Button variant='primary' type='submit'>login</Button>
-      </Form>
+      </Form> */}
 
-      {/* <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit}>
         <div>
-          username: <input />
+          username: <StyledInput />
         </div>
         <div>
-          password: <input type='password' />
+          password: <StyledInput type='password' />
         </div>
-        <button type="submit">login</button>
-      </form> */}
+        <StyledButton type="submit" primary=''>login</StyledButton>
+      </form>
     </div>
   )
 }
@@ -162,14 +192,15 @@ const App = () => {
   }
 
   return (
-    <div className='container'>
+    <StyledPage>
+      <div className='container'>
       {(message && 
         <Alert variant='success'>
           {message}
         </Alert>
       )}
 
-      <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
+      {/* <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
         <Navbar.Toggle aria-controls='responsive-navbar-nav' />
         <Navbar.Collapse id='responsive-navbar-nav'>
           <Nav className='me-auto'>
@@ -196,9 +227,9 @@ const App = () => {
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
-      </Navbar>
+      </Navbar> */}
 
-      {/* <div>
+      <StyledNavigation>
         <Link style={padding} to="/">home</Link>
         <Link style={padding} to="/notes">notes</Link>
         <Link style={padding} to="/users">users</Link>
@@ -208,7 +239,7 @@ const App = () => {
         }
         <Link style={padding} to='/counter'>counter</Link>
         <Link style={padding} to='/field-form'>field-form</Link>
-      </div> */}
+      </StyledNavigation>
 
       <Routes>
         <Route path='/counter' element={<Counter />} />
@@ -219,11 +250,15 @@ const App = () => {
         <Route path="/login" element={<Login onLogin={login} />} />
         <Route path="/" element={<Home />} />
       </Routes>
-      <div>
+      {/* <div>
         <br />
         <em>Note app, Department of Computer Science 2023</em>
+      </div> */}
+      <StyledFooter>
+        <em>Note app, Department of Computer Science 2023</em>
+      </StyledFooter>
       </div>
-    </div>
+    </StyledPage>
   )
 }
 
