@@ -35,7 +35,7 @@ export const loginUser = (credentials) => {
       blogService.setToken(user.token)
       return user
     } catch {
-      throw new Error('wrong username or password')
+      throw new Error('Sorry, wrong username or password')
     }
   }
 }
