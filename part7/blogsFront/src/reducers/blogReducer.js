@@ -4,7 +4,7 @@ import blogService from '../services/blogs'
 import { setNotification } from './notificationReducer'
 
 const sortFn = (arr) => {
-  return arr.sort((a, b) => b.votes - a.votes)
+  return arr.sort((a, b) => b.likes - a.likes)
 }
 
 const blogSlice = createSlice({
@@ -17,10 +17,17 @@ const blogSlice = createSlice({
     createBlog(state, action) {
       return sortFn([...state, action.payload])
     },
+    addLike(state, action) {
+      const changedBlog = action.payload
+      return sortFn(state.map((blog) => (blog.id !== changedBlog.id ? blog : changedBlog)))
+    },
+    deleteBlog(state, action) {
+      return state.filter((blog) => blog.id !== action.payload)
+    },
   },
 })
 
-const { setBlogs, createBlog } = blogSlice.actions
+const { setBlogs, createBlog, addLike, deleteBlog } = blogSlice.actions
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
@@ -44,6 +51,20 @@ export const appendBlog = ({ title, author, url }) => {
     } catch {
       dispatch(setNotification('Sorry your blog was not added', 'error'))
     }
+  }
+}
+
+export const appendLike = (blog) => {
+  return async (dispatch) => {
+    const changedBlog = await blogService.update(blog.id, { ...blog, likes: blog.likes + 1 })
+    dispatch(addLike(changedBlog))
+  }
+}
+
+export const removeBlog = (id) => {
+  return async (dispatch) => {
+    await blogService.remove(id)
+    dispatch(deleteBlog(id))
   }
 }
 

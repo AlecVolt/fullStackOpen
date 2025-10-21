@@ -1,9 +1,12 @@
 import { useState } from 'react'
 import './blog.css'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { appendLike, removeBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
 const Blog = ({ blog }) => {
   const user = useSelector((store) => store.user)
+  const dispatch = useDispatch()
 
   const [isView, setIsView] = useState(false)
   const buttonLabel = isView ? 'hide' : 'view'
@@ -12,37 +15,18 @@ const Blog = ({ blog }) => {
     setIsView((prev) => !prev)
   }
 
-  // const updateLike = async (id, updatedBlogObject) => {
-  //   try {
-  //     const updatedBlog = await blogService.update(id, updatedBlogObject)
-
-  //     setBlogs(sortBlogs(blogs.map((blog) => (blog.id !== id ? blog : updatedBlog))))
-  //   } catch {
-  //     dispatch(setNotification('Sorry blog was not updated', 'error'))
-  //   }
-  // }
-
-  // const deleteBlog = async (id) => {
-  //   try {
-  //     await blogService.remove(id)
-
-  //     setBlogs(sortBlogs(blogs.filter((blog) => blog.id !== id)))
-
-  //     dispatch(setNotification('Blog was deleted'))
-  //   } catch {
-  //     dispatch(setNotification('Sorry blog was not deleted', 'error'))
-  //   }
-  // }
-
   const handleAddLike = () => {
-    const updatedBlog = { ...blog, likes: blog.likes + 1 }
-
-    updateLike(blog.id, updatedBlog)
+    dispatch(appendLike(blog))
   }
 
   const handleDeleteBlog = () => {
     if (confirm(`Are you sure you want to delete the blog "${blog.title}" by ${blog.author}?`)) {
-      deleteBlog(blog.id)
+      try {
+        dispatch(removeBlog(blog.id))
+        dispatch(setNotification('Blog was deleted'))
+      } catch {
+        dispatch(setNotification('Sorry blog was not deleted', 'error'))
+      }
     }
   }
 
