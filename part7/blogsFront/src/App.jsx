@@ -6,15 +6,18 @@ import BlogList from './components/BlogsList'
 import CreateBlogForm from './components/CreateBlogForm'
 import Notification from './components/Notification'
 import Toggable from './components/Toggable'
+import { useDispatch } from 'react-redux'
+import { setNotification } from './reducers/notificationReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState({ message: null, messageStyle: 'notification' })
 
   const createBlogFormRef = useRef()
+
+  const dispatch = useDispatch()
 
   const sortBlogs = (blogs) => {
     const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
@@ -53,21 +56,9 @@ const App = () => {
       setPassword('')
       blogService.setToken(user.token)
 
-      setNotification({
-        message: `Welcome back, ${user.name}`,
-        messageStyle: 'notification',
-      })
-      setTimeout(() => {
-        setNotification({ message: null })
-      }, 5000)
+      dispatch(setNotification(`Welcome back, ${user.name}`))
     } catch {
-      setNotification({
-        message: 'wrong username or password',
-        messageStyle: 'error',
-      })
-      setTimeout(() => {
-        setNotification({ message: null })
-      }, 5000)
+      dispatch(setNotification('wrong username or password', 'error'))
     }
   }
 
@@ -82,24 +73,11 @@ const App = () => {
       const returnedBlog = await blogService.create(newBlogObject)
 
       setBlogs(sortBlogs(blogs.concat(returnedBlog)))
-
       createBlogFormRef.current.toggleIsVisible()
 
-      setNotification({
-        message: `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
-        messageStyle: 'notification',
-      })
-      setTimeout(() => {
-        setNotification({ message: null })
-      }, 5000)
+      dispatch(setNotification(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`))
     } catch {
-      setNotification({
-        message: 'Sorry your blog was not added',
-        messageStyle: 'error',
-      })
-      setTimeout(() => {
-        setNotification({ message: null })
-      }, 5000)
+      dispatch(setNotification('Sorry your blog was not added', 'error'))
     }
   }
 
@@ -108,22 +86,8 @@ const App = () => {
       const updatedBlog = await blogService.update(id, updatedBlogObject)
 
       setBlogs(sortBlogs(blogs.map((blog) => (blog.id !== id ? blog : updatedBlog))))
-
-      // setNotification({
-      //   message: `Blog ${updatedBlog.title} by ${updatedBlog.author} updated`,
-      //   messageStyle: 'notification'
-      // })
-      // setTimeout(() => {
-      //   setNotification({ message: null })
-      // }, 5000)
     } catch {
-      setNotification({
-        message: 'Sorry blog was not updated',
-        messageStyle: 'error',
-      })
-      setTimeout(() => {
-        setNotification({ message: null })
-      }, 5000)
+      dispatch(setNotification('Sorry blog was not updated', 'error'))
     }
   }
 
@@ -133,27 +97,15 @@ const App = () => {
 
       setBlogs(sortBlogs(blogs.filter((blog) => blog.id !== id)))
 
-      setNotification({
-        message: 'Blog was deleted',
-        messageStyle: 'notification',
-      })
-      setTimeout(() => {
-        setNotification({ message: null })
-      }, 5000)
+      dispatch(setNotification('Blog was deleted'))
     } catch {
-      setNotification({
-        message: 'Sorry blog was not deleted',
-        messageStyle: 'error',
-      })
-      setTimeout(() => {
-        setNotification({ message: null })
-      }, 5000)
+      dispatch(setNotification('Sorry blog was not deleted', 'error'))
     }
   }
 
   return (
     <>
-      <Notification message={notification.message} messageStyle={notification.messageStyle} />
+      <Notification />
 
       {!user && (
         <LoginForm
