@@ -1,0 +1,184 @@
+const Blog = require('../models/blog')
+const User = require('../models/user')
+
+const initialBlogs = [
+  {
+    _id: '68e14397ec0d7ff27fc194ae',
+    title: 'some title',
+    author: 'some author',
+    url: 'some url',
+    likes: 10,
+    user: '68e3d520c11765176e3ead91',
+    __v: 0,
+  },
+  {
+    _id: '68e2943934d85fe4f7ae749c',
+    title: 'some new user title',
+    author: 'some author',
+    url: 'some new user url',
+    likes: 22,
+    user: '68e3d520c11765176e3ead91',
+    __v: 0,
+  },
+  {
+    _id: '68e2943934d85fe4f7ae749e',
+    title: 'some new user title',
+    author: 'some author',
+    url: 'some new user url',
+    likes: 22,
+    user: '68e3d520c11765176e3ead91',
+    __v: 0,
+  },
+  {
+    _id: '68e2944434d85fe4f7ae74a2',
+    title: 'some new user title',
+    author: 'some author',
+    url: 'some new user url',
+    likes: 22,
+    user: '68e3d520c11765176e3ead91',
+    __v: 0,
+  },
+  {
+    _id: '68e2945b34d85fe4f7ae74a5',
+    title: 'some new user title',
+    author: 'some author',
+    url: 'some new user url',
+    likes: 22,
+    user: '68e3d520c11765176e3ead91',
+    __v: 0,
+  },
+  {
+    _id: '68e294d934d85fe4f7ae74aa',
+    title: 'some new user title',
+    author: 'some author',
+    url: 'some new user url',
+    likes: 22,
+    user: '68e3d520c11765176e3ead91',
+    __v: 0,
+  },
+  {
+    _id: '68e2a8366b6906d8158e98f0',
+    title: 'cool new title',
+    author: 'cool author',
+    url: 'some cool url',
+    likes: 10,
+    user: '68e2978db3561ddcbd68ab9b',
+    __v: 0,
+  },
+  {
+    _id: '68e2a85a6b6906d8158e98f6',
+    title: 'lala new title',
+    author: 'lala author',
+    url: 'lala cool url',
+    likes: 1,
+    user: '68e297c7b3561ddcbd68ab9f',
+    __v: 0,
+  },
+  {
+    _id: '68e2a8696b6906d8158e98fa',
+    title: 'new title',
+    author: 'author',
+    url: 'cool url',
+    likes: 11,
+    user: '68e297c7b3561ddcbd68ab9f',
+    __v: 0,
+  },
+  {
+    _id: '68e2a8836b6906d8158e9900',
+    title: 'new title',
+    author: 'author',
+    url: 'cool url',
+    likes: 11,
+    user: '68e29ae2542838e73dea780b',
+    __v: 0,
+  },
+  {
+    _id: '68e2a8986b6906d8158e9904',
+    title: 'new title from rest client',
+    author: 'author name',
+    url: 'cool url from client',
+    likes: 18,
+    user: '68e29ae2542838e73dea780b',
+    __v: 0,
+  },
+  {
+    _id: '68e2a8b76b6906d8158e9908',
+    title: 'new title client',
+    author: 'new author',
+    url: 'url client',
+    likes: 180,
+    user: '68e29ae2542838e73dea780b',
+    __v: 0,
+  },
+]
+
+const initialUsers = [
+  {
+    _id: '68e3d520c11765176e3ead91',
+    username: 'cris',
+    name: 'Cris P',
+    passwordHash: '$2b$10$5pKyh7i27h2NN6FmejAWXuJmxC4/ZXf7s571Jg84kZIP3IHMUNX6O',
+    blogs: [
+      '68e14397ec0d7ff27fc194ae',
+      '68e2943934d85fe4f7ae749c',
+      '68e2943934d85fe4f7ae749e',
+      '68e2944434d85fe4f7ae74a2',
+      '68e2945b34d85fe4f7ae74a5',
+      '68e294d934d85fe4f7ae74aa',
+    ],
+    __v: 6,
+  },
+  {
+    _id: '68e2978db3561ddcbd68ab9b',
+    username: 'hellas',
+    name: 'Arto Hellas',
+    passwordHash: '$2b$10$X.wVxX8cDzfQfbVk/uiV/OQeDMEGIrjiOUQNyEZMBdYFnjeVj6xca',
+    blogs: ['68e2978db3561ddcbd68ab9b'],
+    __v: 0,
+  },
+  {
+    _id: '68e297c7b3561ddcbd68ab9f',
+    username: 'creatorPower',
+    name: 'Creator Power',
+    passwordHash: '$2b$10$ggeHE1JW36sMKZaI52ob4Oc2NioZAD7i9c/usfwabCmM6PPeRY/RC',
+    blogs: ['68e2a85a6b6906d8158e98f6', '68e2a8696b6906d8158e98fa'],
+    __v: 0,
+  },
+  {
+    _id: '68e29ae2542838e73dea780b',
+    username: 'mark',
+    name: 'Mark Jackson',
+    passwordHash: '$2b$10$WJLLE7URxPBp7Uef4mvk8eH/QgZjeHNjYoftmdtqFWVMy2kL6vMxS',
+    blogs: ['68e2a8836b6906d8158e9900', '68e2a8986b6906d8158e9904', '68e2a8b76b6906d8158e9908'],
+    __v: 0,
+  },
+]
+
+const nonExistingId = async () => {
+  const blog = new Blog({
+    title: 'Non existing book',
+  })
+
+  await blog.save()
+  await blog.deleteOne()
+
+  return blog._id.toString()
+}
+
+const blogsInDb = async () => {
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
+  return blogs.map((blog) => blog.toJSON())
+}
+
+const usersInDb = async () => {
+  const users = await User.find({})
+  return users.map((u) => u.toJSON())
+}
+
+module.exports = {
+  initialBlogs,
+  nonExistingId,
+  blogsInDb,
+  initialUsers,
+  usersInDb,
+}

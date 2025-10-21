@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNyZWF0b3JQb3dlciIsImlkIjoiNjhlMjk3YzdiMzU2MWRkY2JkNjhhYjlmIiwiaWF0IjoxNzU5Njg5NjAzLCJleHAiOjE3NTk2OTMyMDN9.lqR4ILUtvilzIDByD1B7BVanxxY56dL4erYeboj3Lqs
+
+{
+  "author": "author",
+  "title": "interesting title",
+  "url": "http://someurl792.com",
+  "likes": 203
+}
