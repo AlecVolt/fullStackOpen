@@ -1,14 +1,20 @@
+import { useDispatch, useSelector } from 'react-redux'
 import Blog from './Blog'
 
-const BlogList = ({ blogs, setBlogs, updateLike, user, deleteBlog }) => {
+import { sortBlogs } from '../reducers/blogReducer'
+
+const BlogList = () => {
+  const blogs = useSelector((store) => store.blogs)
+  const dispatch = useDispatch()
+
   const sortByLikesHighest = () => {
     const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
-    setBlogs(sortedBlogs)
+    dispatch(sortBlogs(sortedBlogs))
   }
 
   const sortByLikesLowest = () => {
     const sortedBlogs = [...blogs].sort((a, b) => a.likes - b.likes)
-    setBlogs(sortedBlogs)
+    dispatch(sortBlogs(sortedBlogs))
   }
 
   return (
@@ -22,7 +28,7 @@ const BlogList = ({ blogs, setBlogs, updateLike, user, deleteBlog }) => {
       </button>
 
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} updateLike={updateLike} user={user} deleteBlog={deleteBlog} />
+        <Blog key={blog.id} blog={blog} />
       ))}
     </>
   )

@@ -1,14 +1,24 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { appendBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
-const CreateBlogForm = ({ createBlog }) => {
+const CreateBlogForm = ({ createBlogFormRef }) => {
+  const dispatch = useDispatch()
+
   const initialBlogState = { title: '', author: '', url: '' }
   const [newBlog, setNewBlog] = useState(initialBlogState)
 
   const handleSubmit = (event) => {
     event.preventDefault()
 
-    createBlog(newBlog)
-    setNewBlog(initialBlogState)
+    try {
+      dispatch(appendBlog(newBlog))
+      createBlogFormRef.current.toggleIsVisible()
+      setNewBlog(initialBlogState)
+    } catch {
+      dispatch(setNotification('Sorry your blog was not added', 'error'))
+    }
   }
 
   return (
