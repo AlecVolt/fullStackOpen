@@ -13,7 +13,7 @@ export const getAllBlogs = async () => {
     throw Error('Failed to fetch blogs')
   }
 
-  return response.json()
+  return await response.json()
 }
 
 export const createBlog = async (newBlog) => {
@@ -32,7 +32,7 @@ export const createBlog = async (newBlog) => {
     throw Error('Failed to create a blog')
   }
 
-  return response.json()
+  return await response.json()
 }
 
 export const removeBlog = async (id) => {
@@ -49,6 +49,8 @@ export const removeBlog = async (id) => {
   if (!response.ok) {
     throw Error('Failed to delete a blog')
   }
+
+  return id
 }
 
 export const updateBlog = async (updatedBlog) => {
@@ -66,5 +68,5 @@ export const updateBlog = async (updatedBlog) => {
     throw Error('Failed to update a blog')
   }
 
-  return response.json()
+  return await response.json()
 }

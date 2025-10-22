@@ -11,13 +11,15 @@ import Toggable from './components/Toggable'
 import NotificationContext from './contexts/NotificationContext'
 import { useContext } from 'react'
 import { getAllBlogs, setToken } from './requests/blogs'
+import UserContext from './contexts/UserContext'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
+  // const [user, setUser] = useState(null)
 
   const createBlogFormRef = useRef()
+  const { user, userDispatch } = useContext(UserContext)
   const { notificationDispatch } = useContext(NotificationContext)
 
   const blogResult = useQuery({
@@ -37,7 +39,11 @@ const App = () => {
 
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      userDispatch({
+        type: 'SET',
+        payload: user,
+      })
+      // setUser(user)
       blogService.setToken(user.token)
       setToken(user.token)
     }
@@ -51,7 +57,11 @@ const App = () => {
 
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
 
-      setUser(user)
+      // setUser(user)
+      userDispatch({
+        type: 'SET',
+        payload: user,
+      })
       setUsername('')
       setPassword('')
       blogService.setToken(user.token)
@@ -82,7 +92,9 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    setUser(null)
+    userDispatch({
+      type: 'REMOVE',
+    })
     window.localStorage.removeItem('loggedBlogAppUser')
     window.location.reload()
   }

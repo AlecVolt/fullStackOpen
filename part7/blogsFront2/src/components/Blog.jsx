@@ -79,7 +79,8 @@ const Blog = ({ blog, user }) => {
   return (
     <div className="blogItem">
       <p>
-        "<span className="blogTitle">{blog.title}</span>" by <span className="blogAuthor">{blog.author}</span>
+        "<span className="blogTitle">{blog.title}</span>" by{' '}
+        <span className="blogAuthor">{blog.author}</span>
         <button className="button" onClick={toggleIsView}>
           {buttonLabel}
         </button>
