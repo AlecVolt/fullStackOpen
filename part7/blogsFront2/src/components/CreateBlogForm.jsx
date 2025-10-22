@@ -14,7 +14,7 @@ const CreateBlogForm = ({ createBlogFormRef }) => {
 
   const newBlogMutation = useMutation({
     mutationFn: createBlog,
-    onSuccess: (newBlog) => {
+    onMutate: (newBlog) => {
       queryClient.setQueryData(['blogs'], (old = []) => old.concat(newBlog))
       notificationDispatch({
         type: 'NEW',

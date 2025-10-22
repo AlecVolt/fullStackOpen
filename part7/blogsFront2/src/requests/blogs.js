@@ -34,3 +34,37 @@ export const createBlog = async (newBlog) => {
 
   return response.json()
 }
+
+export const removeBlog = async (id) => {
+  const options = {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+  }
+
+  const response = await fetch(`${baseUrl}/${id}`, options)
+
+  if (!response.ok) {
+    throw Error('Failed to delete a blog')
+  }
+}
+
+export const updateBlog = async (updatedBlog) => {
+  const options = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updatedBlog),
+  }
+
+  const response = await fetch(`${baseUrl}/${updatedBlog.id}`, options)
+
+  if (!response.ok) {
+    throw Error('Failed to update a blog')
+  }
+
+  return response.json()
+}

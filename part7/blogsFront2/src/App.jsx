@@ -11,10 +11,8 @@ import Toggable from './components/Toggable'
 import NotificationContext from './contexts/NotificationContext'
 import { useContext } from 'react'
 import { getAllBlogs, setToken } from './requests/blogs'
-import { loginUser } from './requests/login'
 
 const App = () => {
-  // const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -89,54 +87,6 @@ const App = () => {
     window.location.reload()
   }
 
-  const updateLike = async (id, updatedBlogObject) => {
-    try {
-      const updatedBlog = await blogService.update(id, updatedBlogObject)
-
-      setBlogs(sortBlogs(blogs.map((blog) => (blog.id !== id ? blog : updatedBlog))))
-    } catch {
-      notificationDispatch({
-        type: 'ERROR',
-        payload: 'Sorry blog was not updated',
-      })
-
-      setTimeout(() => {
-        notificationDispatch({
-          type: 'HIDE',
-        })
-      }, 5000)
-    }
-  }
-
-  const deleteBlog = async (id) => {
-    try {
-      await blogService.remove(id)
-
-      setBlogs(sortBlogs(blogs.filter((blog) => blog.id !== id)))
-
-      notificationDispatch({
-        type: 'DELETE',
-      })
-
-      setTimeout(() => {
-        notificationDispatch({
-          type: 'HIDE',
-        })
-      }, 5000)
-    } catch {
-      notificationDispatch({
-        type: 'ERROR',
-        payload: 'Sorry blog was not deleted',
-      })
-
-      setTimeout(() => {
-        notificationDispatch({
-          type: 'HIDE',
-        })
-      }, 5000)
-    }
-  }
-
   if (blogResult.isLoading) {
     return <div>Loading...</div>
   }
@@ -167,7 +117,7 @@ const App = () => {
           <Toggable buttonLabel="new blog" ref={createBlogFormRef}>
             <CreateBlogForm createBlogFormRef={createBlogFormRef} />
           </Toggable>
-          <BlogList blogs={blogs} user={user} updateLike={updateLike} deleteBlog={deleteBlog} />
+          <BlogList blogs={blogs} user={user} />
         </>
       )}
     </>
