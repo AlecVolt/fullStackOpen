@@ -1,3 +1,4 @@
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState, useEffect, useRef } from 'react'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -9,30 +10,29 @@ import Toggable from './components/Toggable'
 
 import NotificationContext from './contexts/NotificationContext'
 import { useContext } from 'react'
+import { getAllBlogs, setToken } from './requests/blogs'
+import { loginUser } from './requests/login'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  // const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
+  const createBlogFormRef = useRef()
   const { notificationDispatch } = useContext(NotificationContext)
 
-  const createBlogFormRef = useRef()
+  const blogResult = useQuery({
+    queryKey: ['blogs'],
+    queryFn: getAllBlogs,
+    refetchOnWindowFocus: false,
+    retry: 1,
+  })
 
   const sortBlogs = (blogs) => {
     const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
     return sortedBlogs
   }
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const blogs = await blogService.getAll()
-      setBlogs(sortBlogs(blogs))
-    }
-
-    fetchData()
-  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
@@ -41,6 +41,7 @@ const App = () => {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
       blogService.setToken(user.token)
+      setToken(user.token)
     }
   }, [])
 
@@ -56,13 +57,11 @@ const App = () => {
       setUsername('')
       setPassword('')
       blogService.setToken(user.token)
+      setToken(user.token)
 
       notificationDispatch({
-        type: 'SHOW',
-        payload: {
-          message: `Welcome back, ${user.name}`,
-          messageStyle: 'notification',
-        },
+        type: 'LOGIN',
+        payload: user.name,
       })
 
       setTimeout(() => {
@@ -72,11 +71,8 @@ const App = () => {
       }, 5000)
     } catch {
       notificationDispatch({
-        type: 'SHOW',
-        payload: {
-          message: 'wrong username or password',
-          messageStyle: 'error',
-        },
+        type: 'ERROR',
+        payload: 'wrong username or password',
       })
 
       setTimeout(() => {
@@ -93,44 +89,6 @@ const App = () => {
     window.location.reload()
   }
 
-  const createBlog = async (newBlogObject) => {
-    try {
-      const returnedBlog = await blogService.create(newBlogObject)
-
-      setBlogs(sortBlogs(blogs.concat(returnedBlog)))
-
-      createBlogFormRef.current.toggleIsVisible()
-
-      notificationDispatch({
-        type: 'SHOW',
-        payload: {
-          message: `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
-          messageStyle: 'notification',
-        },
-      })
-
-      setTimeout(() => {
-        notificationDispatch({
-          type: 'HIDE',
-        })
-      }, 5000)
-    } catch {
-      notificationDispatch({
-        type: 'SHOW',
-        payload: {
-          message: 'Sorry your blog was not added',
-          messageStyle: 'error',
-        },
-      })
-
-      setTimeout(() => {
-        notificationDispatch({
-          type: 'HIDE',
-        })
-      }, 5000)
-    }
-  }
-
   const updateLike = async (id, updatedBlogObject) => {
     try {
       const updatedBlog = await blogService.update(id, updatedBlogObject)
@@ -138,11 +96,8 @@ const App = () => {
       setBlogs(sortBlogs(blogs.map((blog) => (blog.id !== id ? blog : updatedBlog))))
     } catch {
       notificationDispatch({
-        type: 'SHOW',
-        payload: {
-          message: 'Sorry blog was not updated',
-          messageStyle: 'error',
-        },
+        type: 'ERROR',
+        payload: 'Sorry blog was not updated',
       })
 
       setTimeout(() => {
@@ -160,11 +115,7 @@ const App = () => {
       setBlogs(sortBlogs(blogs.filter((blog) => blog.id !== id)))
 
       notificationDispatch({
-        type: 'SHOW',
-        payload: {
-          message: 'Blog was deleted',
-          messageStyle: 'notification',
-        },
+        type: 'DELETE',
       })
 
       setTimeout(() => {
@@ -174,11 +125,8 @@ const App = () => {
       }, 5000)
     } catch {
       notificationDispatch({
-        type: 'SHOW',
-        payload: {
-          message: 'Sorry blog was not deleted',
-          messageStyle: 'error',
-        },
+        type: 'ERROR',
+        payload: 'Sorry blog was not deleted',
       })
 
       setTimeout(() => {
@@ -188,6 +136,16 @@ const App = () => {
       }, 5000)
     }
   }
+
+  if (blogResult.isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (blogResult.isError) {
+    return <div>blogs service not available due to problems in server</div>
+  }
+
+  const blogs = sortBlogs(blogResult.data)
 
   return (
     <>
@@ -207,9 +165,9 @@ const App = () => {
         <>
           <button onClick={handleLogout}>logout</button>
           <Toggable buttonLabel="new blog" ref={createBlogFormRef}>
-            <CreateBlogForm createBlog={createBlog} />
+            <CreateBlogForm createBlogFormRef={createBlogFormRef} />
           </Toggable>
-          <BlogList blogs={blogs} setBlogs={setBlogs} user={user} updateLike={updateLike} deleteBlog={deleteBlog} />
+          <BlogList blogs={blogs} user={user} updateLike={updateLike} deleteBlog={deleteBlog} />
         </>
       )}
     </>

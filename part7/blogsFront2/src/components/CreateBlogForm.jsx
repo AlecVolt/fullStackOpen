@@ -1,14 +1,53 @@
+import { useContext } from 'react'
 import { useState } from 'react'
 
-const CreateBlogForm = ({ createBlog }) => {
+import NotificationContext from '../contexts/NotificationContext'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createBlog } from '../requests/blogs'
+
+const CreateBlogForm = ({ createBlogFormRef }) => {
+  const { notificationDispatch } = useContext(NotificationContext)
+  const queryClient = useQueryClient()
+
   const initialBlogState = { title: '', author: '', url: '' }
   const [newBlog, setNewBlog] = useState(initialBlogState)
 
+  const newBlogMutation = useMutation({
+    mutationFn: createBlog,
+    onSuccess: (newBlog) => {
+      queryClient.setQueryData(['blogs'], (old = []) => old.concat(newBlog))
+      notificationDispatch({
+        type: 'NEW',
+        payload: {
+          title: newBlog.title,
+          author: newBlog.author,
+        },
+      })
+
+      setTimeout(() => {
+        notificationDispatch({
+          type: 'HIDE',
+        })
+      }, 5000)
+    },
+    onError: () => {
+      notificationDispatch({
+        type: 'ERROR',
+        payload: 'Sorry your blog was not added',
+      })
+
+      setTimeout(() => {
+        notificationDispatch({
+          type: 'HIDE',
+        })
+      }, 5000)
+    },
+  })
+
   const handleSubmit = (event) => {
     event.preventDefault()
-
-    createBlog(newBlog)
-    setNewBlog(initialBlogState)
+    newBlogMutation.mutate(newBlog)
+    createBlogFormRef.current.toggleIsVisible()
   }
 
   return (
@@ -21,7 +60,7 @@ const CreateBlogForm = ({ createBlog }) => {
             <input
               type="text"
               value={newBlog.title}
-              onChange={({ target }) => setNewBlog(prev => ({ ...prev, title: target.value }))}
+              onChange={({ target }) => setNewBlog((prev) => ({ ...prev, title: target.value }))}
             />
           </label>
         </div>
@@ -31,7 +70,7 @@ const CreateBlogForm = ({ createBlog }) => {
             <input
               type="text"
               value={newBlog.author}
-              onChange={({ target }) => setNewBlog(prev => ({ ...prev, author: target.value }))}
+              onChange={({ target }) => setNewBlog((prev) => ({ ...prev, author: target.value }))}
             />
           </label>
         </div>
@@ -41,7 +80,7 @@ const CreateBlogForm = ({ createBlog }) => {
             <input
               type="text"
               value={newBlog.url}
-              onChange={({ target }) => setNewBlog(prev => ({ ...prev, url: target.value }))}
+              onChange={({ target }) => setNewBlog((prev) => ({ ...prev, url: target.value }))}
             />
           </label>
         </div>
