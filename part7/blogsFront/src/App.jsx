@@ -7,11 +7,12 @@ import Toggable from './components/Toggable'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUser, logoutUser } from './reducers/userReducer'
-import { Link, Route, Routes, Navigate, useNavigate } from 'react-router-dom'
+import { Link, Route, Routes, Navigate, useNavigate, useMatch } from 'react-router-dom'
 import HomePage from './components/HomePage'
 import PrivateRoute from './components/PrivateRoute'
 import UsersList from './components/UsersList'
 import { initializeUsers } from './reducers/usersReducer'
+import SingleUser from './components/SingleUser'
 
 const App = () => {
   const createBlogFormRef = useRef()
@@ -30,6 +31,8 @@ const App = () => {
   }, [dispatch])
 
   const user = useSelector((store) => store.user)
+
+  const users = useSelector((store) => store.users)
 
   const handleLogout = () => {
     dispatch(logoutUser())
@@ -51,6 +54,7 @@ const App = () => {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/blogs" element={<BlogList />} />
         <Route path="/users" element={<UsersList />} />
+        <Route path="/users/:id" element={<SingleUser users={users} />} />
       </Routes>
 
       {/* {!user && <LoginForm />} */}
