@@ -35,7 +35,7 @@ const BlogList = () => {
         </div>
       )}
 
-      <div>
+      <div className="button-order">
         <button type="button" onClick={sortByLikesHighest}>
           Order by likes (highest first)
         </button>

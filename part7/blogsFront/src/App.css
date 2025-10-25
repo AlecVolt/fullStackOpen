@@ -1,0 +1,84 @@
+* {
+  font-size: 16px;
+  color: #324c4d;
+}
+
+a {
+  text-decoration: none;
+  color: #da8e89;
+}
+
+a span {
+  color: #da8e89;
+}
+
+button {
+  border-radius: 12px;
+  padding: 4px 12px;
+  margin: 4px 8px;
+  background-color: transparent;
+  cursor: pointer;
+  transition:
+    color 0.3s,
+    background-color 0.3s;
+}
+
+button:hover {
+  background-color: #da8e89;
+  color: black;
+}
+
+.button-order {
+  margin: 16px 0 24px;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.nav-links a {
+  font-size: 24px;
+  margin: 0 25px;
+  color: #966e30;
+}
+
+.nav-links a span {
+  color: #966e30;
+}
+
+.nav-login a,
+.nav-login span,
+.nav-login button {
+  font-size: 24px;
+}
+
+input {
+  padding: 4px 12px;
+}
+
+th,
+td,
+td a,
+b {
+  font-size: 20px;
+}
+
+h1 {
+  font-size: 52px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 48px;
+}
+
+h3 {
+  font-size: 32px;
+}

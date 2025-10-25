@@ -19,12 +19,14 @@ const UsersList = () => {
   return (
     <>
       <h2>Users</h2>
-      <button type="button" onClick={sortByBlogsHighest}>
-        Order by blogs (highest first)
-      </button>
-      <button type="button" onClick={sortByBlogsLowest}>
-        Order by blogs (lowest first)
-      </button>
+      <div className="button-order">
+        <button type="button" onClick={sortByBlogsHighest}>
+          Order by blogs (highest first)
+        </button>
+        <button type="button" onClick={sortByBlogsLowest}>
+          Order by blogs (lowest first)
+        </button>
+      </div>
       <table>
         <thead>
           <tr>

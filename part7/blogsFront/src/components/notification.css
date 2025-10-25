@@ -1,13 +1,13 @@
 .notification {
   color: black;
   background: lightseagreen;
-  font-size: 20px;
+  font-size: 32px;
   margin-bottom: 10px;
 }
 
 .error {
   color: black;
   background: lightcoral;
-  font-size: 20px;
+  font-size: 32px;
   margin-bottom: 10px;
 }
