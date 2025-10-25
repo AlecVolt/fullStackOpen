@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { appendBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { StyledInput, StyledButton } from './StyledComponents'
 
 const CreateBlogForm = ({ createBlogFormRef }) => {
   const dispatch = useDispatch()
@@ -28,7 +29,7 @@ const CreateBlogForm = ({ createBlogFormRef }) => {
         <div>
           <label>
             title:
-            <input
+            <StyledInput
               type="text"
               value={newBlog.title}
               onChange={({ target }) => setNewBlog((prev) => ({ ...prev, title: target.value }))}
@@ -38,7 +39,7 @@ const CreateBlogForm = ({ createBlogFormRef }) => {
         <div>
           <label>
             author:
-            <input
+            <StyledInput
               type="text"
               value={newBlog.author}
               onChange={({ target }) => setNewBlog((prev) => ({ ...prev, author: target.value }))}
@@ -48,14 +49,14 @@ const CreateBlogForm = ({ createBlogFormRef }) => {
         <div>
           <label>
             url:
-            <input
+            <StyledInput
               type="text"
               value={newBlog.url}
               onChange={({ target }) => setNewBlog((prev) => ({ ...prev, url: target.value }))}
             />
           </label>
         </div>
-        <button type="submit">add new blog</button>
+        <StyledButton type="submit">add new blog</StyledButton>
       </form>
     </>
   )

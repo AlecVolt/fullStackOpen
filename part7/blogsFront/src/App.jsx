@@ -13,7 +13,14 @@ import { initializeUsers } from './reducers/usersReducer'
 import SingleUser from './components/SingleUser'
 import SingleBlog from './components/SingleBlog'
 
-import './App.css'
+import {
+  AppContainer,
+  Wrapper,
+  NavContainer,
+  NavLinksContainer,
+  NavLoginContainer,
+  StyledButton,
+} from './components/StyledComponents'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -39,26 +46,26 @@ const App = () => {
   }
 
   return (
-    <>
-      <Notification />
-
-      <div className="nav">
-        <div className="nav-links">
+    <AppContainer>
+      <NavContainer>
+        <NavLinksContainer>
           <Link to="/">Home</Link>
           <Link to="/blogs">Blogs</Link>
           <Link to="/users">Users</Link>
-        </div>
-        <div className="nav-login">
+        </NavLinksContainer>
+        <NavLoginContainer>
           {user ? (
             <>
               <span>{user.name} logged in</span>
-              <button onClick={handleLogout}>logout</button>
+              <StyledButton onClick={handleLogout}>logout</StyledButton>
             </>
           ) : (
             <Link to="login">login</Link>
           )}
-        </div>
-      </div>
+        </NavLoginContainer>
+      </NavContainer>
+
+      <Notification />
 
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -68,7 +75,7 @@ const App = () => {
         <Route path="/users" element={<UsersList />} />
         <Route path="/users/:id" element={<SingleUser users={users} />} />
       </Routes>
-    </>
+    </AppContainer>
   )
 }
 

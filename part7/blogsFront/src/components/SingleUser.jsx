@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom'
+import { CenteredPage, StyledList, Wrapper } from './StyledComponents'
 
 const SingleUser = ({ users }) => {
   const id = useParams().id
@@ -9,17 +10,19 @@ const SingleUser = ({ users }) => {
   }
 
   return (
-    <>
-      <h2>{user.name}</h2>
-      <h3>added blogs --- {user.blogs.length}</h3>
-      <ul>
-        {user.blogs.map((blog) => (
-          <li key={blog.id}>
-            "{blog.title}" by {blog.author}
-          </li>
-        ))}
-      </ul>
-    </>
+    <Wrapper>
+      <CenteredPage>
+        <h2>{user.name}</h2>
+        <h3>added blogs --- {user.blogs.length}</h3>
+        <StyledList>
+          {user.blogs.map((blog) => (
+            <li key={blog.id}>
+              "{blog.title}" by {blog.author}
+            </li>
+          ))}
+        </StyledList>
+      </CenteredPage>
+    </Wrapper>
   )
 }
 

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { appendLike, removeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import NewCommentForm from './newCommentForm'
+import { StyledButton, StyledList, Wrapper } from './StyledComponents'
 
 const SingleBlog = ({ blogs }) => {
   const user = useSelector((store) => store.user)
@@ -33,7 +34,7 @@ const SingleBlog = ({ blogs }) => {
   }
 
   return (
-    <>
+    <Wrapper>
       <h2>
         "{blog.title}" {blog.author}
       </h2>
@@ -41,16 +42,16 @@ const SingleBlog = ({ blogs }) => {
       <p className="blogUrl">{blog.url}</p>
       <p className="blogLikes">
         likes <span className="likesNum">{blog.likes}</span>
-        <button className="button" onClick={handleAddLike}>
+        <StyledButton className="button" onClick={handleAddLike}>
           like me
-        </button>
+        </StyledButton>
       </p>
       <p className="blogUser">
         {blog.user?.name}
         {user && blog.user && user.username === blog.user.username && (
-          <button className="button" onClick={handleDeleteBlog}>
+          <StyledButton className="button" onClick={handleDeleteBlog}>
             delete blog
-          </button>
+          </StyledButton>
         )}
       </p>
 
@@ -59,13 +60,13 @@ const SingleBlog = ({ blogs }) => {
       {blog.comments.length === 0 ? (
         <p>No comments</p>
       ) : (
-        <ul>
+        <StyledList>
           {blog.comments.map((comment) => (
             <li key={comment}>{comment}</li>
           ))}
-        </ul>
+        </StyledList>
       )}
-    </>
+    </Wrapper>
   )
 }
 

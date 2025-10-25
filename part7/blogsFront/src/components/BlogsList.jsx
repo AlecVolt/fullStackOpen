@@ -5,6 +5,7 @@ import { sortBlogs } from '../reducers/blogReducer'
 import Toggable from './Toggable'
 import CreateBlogForm from './CreateBlogForm'
 import { useRef } from 'react'
+import { OrderButtonContainer, StyledButton, Wrapper } from './StyledComponents'
 
 const BlogList = () => {
   const blogs = useSelector((store) => store.blogs)
@@ -24,7 +25,7 @@ const BlogList = () => {
   }
 
   return (
-    <>
+    <Wrapper>
       <h2>Blogs</h2>
 
       {user && (
@@ -35,19 +36,19 @@ const BlogList = () => {
         </div>
       )}
 
-      <div className="button-order">
-        <button type="button" onClick={sortByLikesHighest}>
+      <OrderButtonContainer className="button-order">
+        <StyledButton type="button" onClick={sortByLikesHighest}>
           Order by likes (highest first)
-        </button>
-        <button type="button" onClick={sortByLikesLowest}>
+        </StyledButton>
+        <StyledButton type="button" onClick={sortByLikesLowest}>
           Order by likes (lowest first)
-        </button>
-      </div>
+        </StyledButton>
+      </OrderButtonContainer>
 
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
-    </>
+    </Wrapper>
   )
 }
 

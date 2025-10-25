@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import User from './User'
 import { sortUsers } from '../reducers/usersReducer'
+import { OrderButtonContainer, StyledButton, StyledTable, Wrapper } from './StyledComponents'
 
 const UsersList = () => {
   const users = useSelector((store) => store.users)
@@ -17,17 +18,17 @@ const UsersList = () => {
   }
 
   return (
-    <>
+    <Wrapper>
       <h2>Users</h2>
-      <div className="button-order">
-        <button type="button" onClick={sortByBlogsHighest}>
+      <OrderButtonContainer className="button-order">
+        <StyledButton type="button" onClick={sortByBlogsHighest}>
           Order by blogs (highest first)
-        </button>
-        <button type="button" onClick={sortByBlogsLowest}>
+        </StyledButton>
+        <StyledButton type="button" onClick={sortByBlogsLowest}>
           Order by blogs (lowest first)
-        </button>
-      </div>
-      <table>
+        </StyledButton>
+      </OrderButtonContainer>
+      <StyledTable>
         <thead>
           <tr>
             <th></th>
@@ -41,8 +42,8 @@ const UsersList = () => {
             <User key={user.id} user={user} />
           ))}
         </tbody>
-      </table>
-    </>
+      </StyledTable>
+    </Wrapper>
   )
 }
 

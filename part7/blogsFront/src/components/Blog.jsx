@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import './blog.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { appendLike, removeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { Link } from 'react-router-dom'
+import { BlogContainer, StyledButton } from '../components/StyledComponents'
 
 const Blog = ({ blog }) => {
   const user = useSelector((store) => store.user)
@@ -32,35 +32,37 @@ const Blog = ({ blog }) => {
   }
 
   return (
-    <div className="blogItem">
+    <BlogContainer>
       <p>
         <Link to={`/blogs/${blog.id}`}>
-          "<span className="blogTitle">{blog.title}</span>" by <span className="blogAuthor">{blog.author}</span>
+          "{blog.title}" by {blog.author}
         </Link>
 
-        <button className="button" onClick={toggleIsView}>
+        <StyledButton className="button" onClick={toggleIsView}>
           {buttonLabel}
-        </button>
+        </StyledButton>
       </p>
       {isView && (
         <>
-          <p className="blogUrl">{blog.url}</p>
+          <a className="blogUrl" href={blog.url}>
+            {blog.url}
+          </a>
           <p className="blogLikes">
             likes <span className="likesNum">{blog.likes}</span>
-            <button className="button" onClick={handleAddLike}>
+            <StyledButton className="button" onClick={handleAddLike}>
               like me
-            </button>
+            </StyledButton>
           </p>
           <p>comments {blog.comments.length}</p>
           <p className="blogUser">{blog.user?.name}</p>
           {user && blog.user && user.username === blog.user.username && (
-            <button className="button" onClick={handleDeleteBlog}>
+            <StyledButton className="button" onClick={handleDeleteBlog}>
               delete blog
-            </button>
+            </StyledButton>
           )}
         </>
       )}
-    </div>
+    </BlogContainer>
   )
 }
 

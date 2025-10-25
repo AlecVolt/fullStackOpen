@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { appendComment } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { StyledButton, StyledInput } from './StyledComponents'
 
 const NewCommentForm = ({ blog }) => {
   const dispatch = useDispatch()
@@ -23,9 +24,9 @@ const NewCommentForm = ({ blog }) => {
     <form onSubmit={handleSubmit}>
       <label>
         comment:
-        <input type="text" value={comment} onChange={({ target }) => setComment(target.value)} />
+        <StyledInput type="text" value={comment} onChange={({ target }) => setComment(target.value)} />
       </label>
-      <button type="submit">Add comment</button>
+      <StyledButton type="submit">Add comment</StyledButton>
     </form>
   )
 }

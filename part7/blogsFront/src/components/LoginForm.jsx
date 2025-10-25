@@ -4,6 +4,7 @@ import { Navigate, useNavigate } from 'react-router-dom'
 
 import { loginUser } from '../reducers/userReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { CenteredPage, StyledButton, StyledInput, Wrapper } from './StyledComponents'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
@@ -28,24 +29,26 @@ const LoginForm = () => {
   }
 
   return (
-    <>
-      <h2>Hi! I'm a blog list app!</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>
-            username
-            <input type="text" value={username} onChange={({ target }) => setUsername(target.value)} />
-          </label>
-        </div>
-        <div>
-          <label>
-            password
-            <input type="password" value={password} onChange={({ target }) => setPassword(target.value)} />
-          </label>
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </>
+    <Wrapper>
+      <CenteredPage>
+        <h2>Hi! I'm a blog list app!</h2>
+        <form onSubmit={handleLogin}>
+          <div>
+            <label>
+              username
+              <StyledInput type="text" value={username} onChange={({ target }) => setUsername(target.value)} />
+            </label>
+          </div>
+          <div>
+            <label>
+              password
+              <StyledInput type="password" value={password} onChange={({ target }) => setPassword(target.value)} />
+            </label>
+          </div>
+          <StyledButton type="submit">login</StyledButton>
+        </form>
+      </CenteredPage>
+    </Wrapper>
   )
 }
 
