@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { appendLike, removeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import NewCommentForm from './newCommentForm'
 
 const SingleBlog = ({ blogs }) => {
   const user = useSelector((store) => store.user)
@@ -44,11 +45,25 @@ const SingleBlog = ({ blogs }) => {
           like me
         </button>
       </p>
-      <p className="blogUser">{blog.user?.name}</p>
-      {user && blog.user && user.username === blog.user.username && (
-        <button className="button" onClick={handleDeleteBlog}>
-          delete blog
-        </button>
+      <p className="blogUser">
+        {blog.user?.name}
+        {user && blog.user && user.username === blog.user.username && (
+          <button className="button" onClick={handleDeleteBlog}>
+            delete blog
+          </button>
+        )}
+      </p>
+
+      <h3>Comments</h3>
+      <NewCommentForm blog={blog} />
+      {blog.comments.length === 0 ? (
+        <p>No comments</p>
+      ) : (
+        <ul>
+          {blog.comments.map((comment) => (
+            <li key={comment}>{comment}</li>
+          ))}
+        </ul>
       )}
     </>
   )

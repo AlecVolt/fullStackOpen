@@ -14,6 +14,12 @@ const blogSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  comments: [
+    {
+      type: String,
+      minLength: [3, 'comment must be at least 3 characters long'],
+    },
+  ],
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -23,9 +29,6 @@ const blogSchema = new mongoose.Schema({
 blogSchema.set('toJSON', {
   transform: (document, returnedObj) => {
     returnedObj.id = returnedObj._id.toString()
-    // if (returnedObj.user) {
-    //   returnedObj.user = returnedObj.user.toString()
-    // }
     delete returnedObj._id
     delete returnedObj.__v
   },

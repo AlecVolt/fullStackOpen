@@ -51,6 +51,7 @@ const Blog = ({ blog }) => {
               like me
             </button>
           </p>
+          <p>comments {blog.comments.length}</p>
           <p className="blogUser">{blog.user?.name}</p>
           {user && blog.user && user.username === blog.user.username && (
             <button className="button" onClick={handleDeleteBlog}>
