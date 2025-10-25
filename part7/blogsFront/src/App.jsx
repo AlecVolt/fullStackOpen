@@ -1,21 +1,19 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogsList'
-import CreateBlogForm from './components/CreateBlogForm'
 import Notification from './components/Notification'
-import Toggable from './components/Toggable'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUser, logoutUser } from './reducers/userReducer'
-import { Link, Route, Routes, Navigate, useNavigate, useMatch } from 'react-router-dom'
+import { Link, Route, Routes, Navigate } from 'react-router-dom'
 import HomePage from './components/HomePage'
 import PrivateRoute from './components/PrivateRoute'
 import UsersList from './components/UsersList'
 import { initializeUsers } from './reducers/usersReducer'
 import SingleUser from './components/SingleUser'
+import SingleBlog from './components/SingleBlog'
 
 const App = () => {
-  const createBlogFormRef = useRef()
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -31,8 +29,8 @@ const App = () => {
   }, [dispatch])
 
   const user = useSelector((store) => store.user)
-
   const users = useSelector((store) => store.users)
+  const blogs = useSelector((store) => store.blogs)
 
   const handleLogout = () => {
     dispatch(logoutUser())
@@ -53,6 +51,7 @@ const App = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/blogs" element={<BlogList />} />
+        <Route path="/blogs/:id" element={<SingleBlog blogs={blogs} />} />
         <Route path="/users" element={<UsersList />} />
         <Route path="/users/:id" element={<SingleUser users={users} />} />
       </Routes>
@@ -61,10 +60,6 @@ const App = () => {
 
       {/* {user && (
         <>
-          <div>
-            <h3>Navigation</h3>
-            <Link to="/">Home</Link>
-          </div>
           <Toggable buttonLabel="new blog" ref={createBlogFormRef}>
             <CreateBlogForm createBlogFormRef={createBlogFormRef} />
           </Toggable>

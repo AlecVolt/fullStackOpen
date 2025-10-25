@@ -3,6 +3,7 @@ import './blog.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { appendLike, removeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { Link } from 'react-router-dom'
 
 const Blog = ({ blog }) => {
   const user = useSelector((store) => store.user)
@@ -23,9 +24,9 @@ const Blog = ({ blog }) => {
     if (confirm(`Are you sure you want to delete the blog "${blog.title}" by ${blog.author}?`)) {
       try {
         dispatch(removeBlog(blog.id))
-        dispatch(setNotification('Blog was deleted'))
+        dispatch(setNotification(`Blog "${blog.title}" by ${blog.author} was deleted`))
       } catch {
-        dispatch(setNotification('Sorry blog was not deleted', 'error'))
+        dispatch(setNotification(`Sorry blog "${blog.title}" by ${blog.author} was not deleted`, 'error'))
       }
     }
   }
@@ -33,7 +34,10 @@ const Blog = ({ blog }) => {
   return (
     <div className="blogItem">
       <p>
-        "<span className="blogTitle">{blog.title}</span>" by <span className="blogAuthor">{blog.author}</span>
+        <Link to={`/blogs/${blog.id}`}>
+          "<span className="blogTitle">{blog.title}</span>" by <span className="blogAuthor">{blog.author}</span>
+        </Link>
+
         <button className="button" onClick={toggleIsView}>
           {buttonLabel}
         </button>
