@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 import { loginUser } from '../reducers/userReducer'
 import { setNotification } from '../reducers/notificationReducer'
@@ -7,6 +8,8 @@ import { setNotification } from '../reducers/notificationReducer'
 const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  const navigate = useNavigate()
 
   const dispatch = useDispatch()
 
@@ -16,11 +19,11 @@ const LoginForm = () => {
     try {
       const user = await dispatch(loginUser({ username, password }))
       dispatch(setNotification(`Welcome back, ${user.name}`))
-      window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
+      navigate('/')
       setUsername('')
       setPassword('')
     } catch {
-      dispatch(setNotification('wrong username or password la', 'error'))
+      dispatch(setNotification('wrong username or password', 'error'))
     }
   }
 

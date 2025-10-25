@@ -7,39 +7,66 @@ import Toggable from './components/Toggable'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUser, logoutUser } from './reducers/userReducer'
+import { Link, Route, Routes, Navigate, useNavigate } from 'react-router-dom'
+import HomePage from './components/HomePage'
+import PrivateRoute from './components/PrivateRoute'
+import UsersList from './components/UsersList'
+import { initializeUsers } from './reducers/usersReducer'
 
 const App = () => {
-  const user = useSelector((store) => store.user)
   const createBlogFormRef = useRef()
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(initializeUser())
+  }, [dispatch])
 
   useEffect(() => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
   useEffect(() => {
-    dispatch(initializeUser())
+    dispatch(initializeUsers())
   }, [dispatch])
 
-  const handleLogout = async () => {
-    await dispatch(logoutUser())
+  const user = useSelector((store) => store.user)
+
+  const handleLogout = () => {
+    dispatch(logoutUser())
   }
 
   return (
     <>
       <Notification />
 
-      {!user && <LoginForm />}
+      <div>
+        <Link to="/">Home</Link>
+        {user ? <button onClick={handleLogout}>logout</button> : <Link to="login">login</Link>}
+        <Link to="/blogs">Blogs</Link>
+        <Link to="/users">Users</Link>
+      </div>
 
-      {user && (
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/blogs" element={<BlogList />} />
+        <Route path="/users" element={<UsersList />} />
+      </Routes>
+
+      {/* {!user && <LoginForm />} */}
+
+      {/* {user && (
         <>
-          <button onClick={handleLogout}>logout</button>
+          <div>
+            <h3>Navigation</h3>
+            <Link to="/">Home</Link>
+          </div>
           <Toggable buttonLabel="new blog" ref={createBlogFormRef}>
             <CreateBlogForm createBlogFormRef={createBlogFormRef} />
           </Toggable>
           <BlogList />
         </>
-      )}
+      )} */}
     </>
   )
 }
