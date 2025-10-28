@@ -169,8 +169,18 @@ const resolvers = {
 
       if (!newBookAuthor) {
         const newAuthor = new Author({ name: args.author })
-        await newAuthor.save()
-        newBookAuthor = newAuthor
+        try {
+          await newAuthor.save()
+          newBookAuthor = newAuthor
+        } catch (error) {
+          throw new GraphQLError(`Saving author failed.`, {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args.author,
+              error,
+            },
+          })
+        }
       }
 
       const book = new Book({ ...args, author: newBookAuthor })
@@ -178,7 +188,7 @@ const resolvers = {
       try {
         await book.save()
       } catch (error) {
-        throw new GraphQLError('Saving book failed', {
+        throw new GraphQLError(`Saving book failed.`, {
           extensions: {
             code: 'BAD_USER_INPUT',
             invalidArgs: args.title,
