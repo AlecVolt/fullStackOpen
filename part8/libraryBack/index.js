@@ -200,16 +200,32 @@ const resolvers = {
       return book
     },
 
-    editAuthor: (root, args) => {
-      const author = authors.find((a) => a.name === args.name)
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({ name: args.name })
+
+      console.log(author)
 
       if (!author) {
         return null
       }
 
-      const updatedAuthor = { ...author, born: args.setBornTo }
-      authors = authors.map((a) => (a.name !== args.name ? a : updatedAuthor))
-      return updatedAuthor
+      author.born = Number(args.setBornTo)
+
+      console.log(author)
+
+      try {
+        author.save()
+      } catch (error) {
+        throw new GraphQLError('Updating author failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.setBornTo,
+            error,
+          },
+        })
+      }
+
+      return author
     },
   },
 
