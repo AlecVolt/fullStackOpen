@@ -46,11 +46,20 @@ const Authors = () => {
       <div>
         <h3>Set birth year</h3>
         <form onSubmit={submit}>
-          <div>
+          {/* <div>
             <label>
               name
               <input type="text" value={name} onChange={({ target }) => setName(target.value)} />
             </label>
+          </div> */}
+          <div>
+            <select value={name} onChange={({ target }) => setName(target.value)}>
+              {result.data.allAuthors.map((a) => (
+                <option key={a.name} value={a.name}>
+                  {a.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label>
