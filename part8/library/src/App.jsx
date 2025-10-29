@@ -6,6 +6,7 @@ import NewBook from './components/NewBook'
 import { Link, Route, Routes } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useApolloClient } from '@apollo/client/react'
+import Recommendations from './components/Recommendations'
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -41,6 +42,9 @@ const App = () => {
             </Link>
           ) : (
             <>
+              <Link style={{ marginRight: 12 }} to="/recommend">
+                recommend
+              </Link>
               <Link style={{ marginRight: 12 }} to="/newbook">
                 add book
               </Link>
@@ -55,6 +59,7 @@ const App = () => {
         <Route path="/authors" element={<Authors token={token} />} />
         <Route path="/books" element={<Books />} />
         <Route path="/newbook" element={<NewBook />} />
+        <Route path="/recommend" element={<Recommendations />} />
 
         <Route path="/login" element={<LoginForm setToken={setToken} />} />
       </Routes>
