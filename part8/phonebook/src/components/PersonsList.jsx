@@ -19,7 +19,7 @@ const PersonsList = ({ persons }) => {
       <h2>Persons</h2>
       {persons.map((p) => (
         <div key={p.name}>
-          {p.name} {p.phone}
+          {p.name} {p.number}
           <button onClick={() => setNameToSearch(p.name)}>show address</button>
         </div>
       ))}

@@ -3,19 +3,19 @@ import { useMutation } from '@apollo/client/react'
 
 import { EDIT_NUMBER } from '../queries/persons'
 
-const PhoneForm = ({ setError }) => {
+const NumberForm = ({ setError }) => {
   const [name, setName] = useState('')
-  const [phone, setPhone] = useState('')
+  const [number, setNumber] = useState('')
 
   const [changeNumber, result] = useMutation(EDIT_NUMBER)
 
   const submit = (event) => {
     event.preventDefault()
 
-    changeNumber({ variables: { name, phone } })
+    changeNumber({ variables: { name, number } })
 
     setName('')
-    setPhone('')
+    setNumber('')
   }
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const PhoneForm = ({ setError }) => {
           name <input value={name} onChange={({ target }) => setName(target.value)} />
         </div>
         <div>
-          phone <input value={phone} onChange={({ target }) => setPhone(target.value)} />
+          Number <input value={number} onChange={({ target }) => setNumber(target.value)} />
         </div>
         <button type="submit">change number</button>
       </form>
@@ -41,4 +41,4 @@ const PhoneForm = ({ setError }) => {
   )
 }
 
-export default PhoneForm
+export default NumberForm

@@ -142,6 +142,9 @@ const resolvers = {
 
       return Person.find({ number: { $exists: args.number === 'YES' } })
     },
+    findPerson: async (root, args) => {
+      return Person.findOne({ name: args.name })
+    },
     me: (root, args, context) => {
       return context.currentUser
     },
