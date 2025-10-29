@@ -19,6 +19,7 @@ const App = () => {
       setToken(token)
     }
   }, [])
+
   if (result.loading) {
     return <div>loading...</div>
   }
@@ -32,7 +33,7 @@ const App = () => {
 
   const logout = () => {
     setToken(null)
-    localStorage.clear()
+    localStorage.removeItem('phonenumbers-user-token')
     client.resetStore()
   }
 
