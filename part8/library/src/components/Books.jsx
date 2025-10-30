@@ -1,10 +1,22 @@
-import { useQuery } from '@apollo/client/react'
-import { ALL_BOOKS, ALL_BOOKS_BY_GENRE } from '../queries/books'
+import { useQuery, useSubscription } from '@apollo/client/react'
+import { ALL_BOOKS, ALL_BOOKS_BY_GENRE, BOOK_ADDED } from '../queries/books'
 import { useState } from 'react'
+import { updateCache } from '../App'
 
-const Books = () => {
+const Books = ({ setNotification }) => {
   const allBooksResult = useQuery(ALL_BOOKS)
   const [genre, setGenre] = useState('all')
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data, client }) => {
+      const addedBook = data.data.bookAdded
+      updateCache(
+        client.cache,
+        { query: ALL_BOOKS_BY_GENRE, variables: { genre: genre !== 'all' ? genre : null } },
+        addedBook
+      )
+    },
+  })
 
   const result = useQuery(ALL_BOOKS_BY_GENRE, {
     variables: { genre: genre !== 'all' ? genre : null },

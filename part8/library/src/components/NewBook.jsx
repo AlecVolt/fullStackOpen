@@ -1,10 +1,9 @@
 import { useMutation } from '@apollo/client/react'
 import { useState } from 'react'
 import { ALL_BOOKS, CREATE_BOOK, ALL_BOOKS_BY_GENRE } from '../queries/books'
-import { ALL_AUTHORS } from '../queries/authors'
 import { updateCache } from '../App'
 
-const NewBook = () => {
+const NewBook = ({ setNotification }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [published, setPublished] = useState('')
@@ -16,6 +15,9 @@ const NewBook = () => {
     // refetchQueries: [{ query: ALL_AUTHORS }],
     update: (cache, response) => {
       updateCache(cache, { query: ALL_BOOKS }, response.data.addBook)
+
+      setNotification({ message: `${response.data.addBook.title} added`, messageStyle: 'notification' })
+      setTimeout(() => setNotification({ message: null }), 5000)
 
       // cache.updateQuery({ query: ALL_BOOKS_BY_GENRE }, ({ allBooks }) => {
       //   return {

@@ -10,18 +10,38 @@ import Recommendations from './components/Recommendations'
 import { ALL_BOOKS, BOOK_ADDED } from './queries/books'
 import Notification from './components/Notification'
 
+// export const updateCache = (cache, query, addedBook) => {
+//   const uniqByTitle = (a) => {
+//     let seen = new Set()
+//     return a.filter((item) => {
+//       let k = item.title
+//       return seen.has(k) ? false : seen.add(k)
+//     })
+//   }
+
+//   cache.updateQuery(query, ({ allBooks }) => {
+//     return {
+//       allBooks: uniqByTitle(allBooks.concat(addedBook)),
+//     }
+//   })
+// }
+
 export const updateCache = (cache, query, addedBook) => {
   const uniqByTitle = (a) => {
-    let seen = new Set()
+    const seen = new Set()
     return a.filter((item) => {
-      let k = item.title
-      return seen.has(k) ? false : seen.add(k)
+      const key = item.title
+      return seen.has(key) ? false : seen.add(key)
     })
   }
 
-  cache.updateQuery(query, ({ allBooks }) => {
+  cache.updateQuery(query, (data) => {
+    if (!data) {
+      return { allBooks: [addedBook] }
+    }
+
     return {
-      allBooks: uniqByTitle(allBooks.concat(addedBook)),
+      allBooks: uniqByTitle(data.allBooks.concat(addedBook)),
     }
   })
 }
@@ -38,19 +58,6 @@ const App = () => {
       setToken(token)
     }
   }, [])
-
-  useSubscription(BOOK_ADDED, {
-    onData: ({ data, client }) => {
-      const addedBook = data.data.bookAdded
-      updateCache(client.cache, { query: ALL_BOOKS }, addedBook)
-
-      setNotification({ message: `${addedBook.title} added`, messageStyle: 'notification' })
-
-      setTimeout(() => {
-        setNotification({ message: null })
-      }, 5000)
-    },
-  })
 
   const logout = () => {
     setToken(null)
@@ -83,16 +90,15 @@ const App = () => {
               <button onClick={logout}>logout</button>
             </>
           )}
+          <Notification notification={notification} />
         </div>
       </div>
-
-      <Notification notification={notification} />
 
       <Routes>
         <Route path="/" element={<Authors token={token} />} />
         <Route path="/authors" element={<Authors token={token} />} />
-        <Route path="/books" element={<Books />} />
-        <Route path="/newbook" element={<NewBook />} />
+        <Route path="/books" element={<Books setNotification={setNotification} />} />
+        <Route path="/newbook" element={<NewBook setNotification={setNotification} />} />
         <Route path="/recommend" element={<Recommendations />} />
 
         <Route path="/login" element={<LoginForm setToken={setToken} />} />
