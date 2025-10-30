@@ -5,10 +5,29 @@ import LoginForm from './components/LoginForm'
 import NewBook from './components/NewBook'
 import { Link, Route, Routes } from 'react-router-dom'
 import { useEffect } from 'react'
-import { useApolloClient } from '@apollo/client/react'
+import { useApolloClient, useQuery, useSubscription } from '@apollo/client/react'
 import Recommendations from './components/Recommendations'
+import { ALL_BOOKS, BOOK_ADDED } from './queries/books'
+import Notification from './components/Notification'
+
+export const updateCache = (cache, query, addedBook) => {
+  const uniqByTitle = (a) => {
+    let seen = new Set()
+    return a.filter((item) => {
+      let k = item.title
+      return seen.has(k) ? false : seen.add(k)
+    })
+  }
+
+  cache.updateQuery(query, ({ allBooks }) => {
+    return {
+      allBooks: uniqByTitle(allBooks.concat(addedBook)),
+    }
+  })
+}
 
 const App = () => {
+  const [notification, setNotification] = useState({ message: null, messageStyle: 'notification' })
   const [token, setToken] = useState(null)
   const client = useApolloClient()
 
@@ -19,6 +38,19 @@ const App = () => {
       setToken(token)
     }
   }, [])
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data, client }) => {
+      const addedBook = data.data.bookAdded
+      updateCache(client.cache, { query: ALL_BOOKS }, addedBook)
+
+      setNotification({ message: `${addedBook.title} added`, messageStyle: 'notification' })
+
+      setTimeout(() => {
+        setNotification({ message: null })
+      }, 5000)
+    },
+  })
 
   const logout = () => {
     setToken(null)
@@ -53,6 +85,8 @@ const App = () => {
           )}
         </div>
       </div>
+
+      <Notification notification={notification} />
 
       <Routes>
         <Route path="/" element={<Authors token={token} />} />

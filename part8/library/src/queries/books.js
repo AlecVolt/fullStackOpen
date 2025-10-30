@@ -39,4 +39,14 @@ export const CREATE_BOOK = gql`
       ...BookDetails
     }
   }
+  ${BOOK_DETAILS}
+`
+
+export const BOOK_ADDED = gql`
+  subscription Subscription {
+    bookAdded {
+      ...BookDetails
+    }
+  }
+  ${BOOK_DETAILS}
 `
