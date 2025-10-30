@@ -3,7 +3,7 @@ import { ALL_BOOKS, ALL_BOOKS_BY_GENRE, BOOK_ADDED } from '../queries/books'
 import { useState } from 'react'
 import { updateCache } from '../App'
 
-const Books = ({ setNotification }) => {
+const Books = () => {
   const allBooksResult = useQuery(ALL_BOOKS)
   const [genre, setGenre] = useState('all')
 

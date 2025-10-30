@@ -4,18 +4,25 @@ const AUTHOR_DETAILS = gql`
   fragment AuthorDetails on Author {
     name
     born
-    bookCount
+    books
     id
   }
 `
 
 export const ALL_AUTHORS = gql`
-  query {
+  query AllAuthors {
     allAuthors {
-      ...AuthorDetails
+      name
+      born
+      books {
+        title
+        genres
+        id
+        published
+      }
+      id
     }
   }
-  ${AUTHOR_DETAILS}
 `
 
 export const UPDATE_AUTHOR = gql`

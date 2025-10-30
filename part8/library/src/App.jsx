@@ -5,26 +5,9 @@ import LoginForm from './components/LoginForm'
 import NewBook from './components/NewBook'
 import { Link, Route, Routes } from 'react-router-dom'
 import { useEffect } from 'react'
-import { useApolloClient, useQuery, useSubscription } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 import Recommendations from './components/Recommendations'
-import { ALL_BOOKS, BOOK_ADDED } from './queries/books'
 import Notification from './components/Notification'
-
-// export const updateCache = (cache, query, addedBook) => {
-//   const uniqByTitle = (a) => {
-//     let seen = new Set()
-//     return a.filter((item) => {
-//       let k = item.title
-//       return seen.has(k) ? false : seen.add(k)
-//     })
-//   }
-
-//   cache.updateQuery(query, ({ allBooks }) => {
-//     return {
-//       allBooks: uniqByTitle(allBooks.concat(addedBook)),
-//     }
-//   })
-// }
 
 export const updateCache = (cache, query, addedBook) => {
   const uniqByTitle = (a) => {
