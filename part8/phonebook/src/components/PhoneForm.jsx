@@ -33,7 +33,7 @@ const NumberForm = ({ setError }) => {
           name <input value={name} onChange={({ target }) => setName(target.value)} />
         </div>
         <div>
-          Number <input value={number} onChange={({ target }) => setNumber(target.value)} />
+          number <input value={number} onChange={({ target }) => setNumber(target.value)} />
         </div>
         <button type="submit">change number</button>
       </form>
