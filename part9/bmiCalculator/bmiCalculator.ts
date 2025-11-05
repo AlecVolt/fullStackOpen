@@ -32,13 +32,27 @@ const calculateBmi = (height: number, weight: number): string => {
   }
 };
 
-try {
-  const { height, weight } = parseBodyValues(process.argv);
-  console.log(calculateBmi(height, weight));
-} catch (error: unknown) {
-  let errorMessage = 'Something went wrong: ';
-  if (error instanceof Error) {
-    errorMessage += error.message;
+const bmiCalculator = (args: string[]): string => {
+  if (require.main === module) {
+    try {
+      const { height, weight } = parseBodyValues(args);
+      console.log(calculateBmi(height, weight));
+      return calculateBmi(height, weight);
+    } catch (error: unknown) {
+      let errorMessage = 'Something went wrong: ';
+      if (error instanceof Error) {
+        errorMessage += error.message;
+      }
+      console.log(errorMessage);
+      return errorMessage;
+    }
+  } else {
+    const [height, weight] = args;
+    return calculateBmi(Number(height), Number(weight));
   }
-  console.log(errorMessage);
-}
+};
+
+bmiCalculator(process.argv);
+// console.log(bmiCalculator(['180', '74']));
+
+export default bmiCalculator;
