@@ -66,7 +66,7 @@ try {
   console.log(errorMessage);
 }
 
-//console.log(calculateExercises(2, [3, 0, 2, 4.5, 0, 3, 1]));
+// console.log(calculateExercises(2, [3, 0, 2, 4.5, 0, 3, 1]));
 // console.log(calculateExercises([3, 3, 2, 4.5, 0, 3.1, 1.3], 2));
 // console.log(calculateExercises([0, 1, 0, 0.5, 0, 3, 0], 2));
 
