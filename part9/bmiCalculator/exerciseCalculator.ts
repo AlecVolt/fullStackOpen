@@ -34,7 +34,7 @@ const parseHoursValues = (args: string[]): HoursValues => {
   };
 };
 
-const calculateExercises = (targetHours: number, exerciseHours: number[]): Result => {
+export const calculateExercises = (targetHours: number, exerciseHours: number[]): Result => {
   const average = exerciseHours.reduce((acc, curr) => acc + curr, 0) / exerciseHours.length;
   const rating = average / targetHours >= 1 ? 3 : average / targetHours >= 0.5 ? 2 : 1;
   const ratingDescription =
