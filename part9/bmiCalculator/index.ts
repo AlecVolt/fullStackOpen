@@ -1,6 +1,7 @@
 import express from 'express';
 import bmiCalculator from './bmiCalculator';
 const app = express();
+app.use(express.json());
 
 app.get('/hello', (_req, res) => {
   res.send('Hello Full Stack!');
@@ -10,7 +11,7 @@ app.get('/bmi', (req, res) => {
   if (!req.query.height || !req.query.weight) {
     return res.status(400).json({ error: 'malformatted parameters' });
   } else {
-    const result = bmiCalculator([String(req.query.height), String(req.query.weight)]);
+    const result = bmiCalculator([JSON.stringify(req.query.height), JSON.stringify(req.query.weight)]);
     return res.status(200).json({
       weight: Number(req.query.height),
       height: Number(req.query.weight),
