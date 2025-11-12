@@ -1,18 +1,10 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import "./index.css"
-// import App from "./App.tsx"
-
-interface WelcomeProps {
-  name: string
-}
-
-const Welcome = (props: WelcomeProps) => {
-  return <h1>Hello, {props.name}</h1>
-}
+import App from "./App.tsx"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <Welcome name="Sahra" />
+    <App />
   </StrictMode>
 )

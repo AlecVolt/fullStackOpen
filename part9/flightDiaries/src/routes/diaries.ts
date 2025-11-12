@@ -1,13 +1,17 @@
 import express, { NextFunction, Request, Response } from 'express';
 import diaryService from '../services/diaryService';
-import { NewDiaryEntry, NonSensitiveDiaryEntry } from '../types';
+import { DiaryEntry, NewDiaryEntry } from '../types';
 import { ZodError } from 'zod';
 import { NewEntrySchema } from '../utils';
 
 const router = express.Router();
 
-router.get('/', (_req, res: Response<NonSensitiveDiaryEntry[]>) => {
-  res.send(diaryService.getNonSensitiveEntries());
+// router.get('/', (_req, res: Response<NonSensitiveDiaryEntry[]>) => {
+//   res.send(diaryService.getNonSensitiveEntries());
+// });
+
+router.get('/', (_req, res: Response<DiaryEntry[]>) => {
+  res.send(diaryService.getEntries());
 });
 
 router.get('/:id', (req, res) => {
