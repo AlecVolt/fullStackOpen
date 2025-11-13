@@ -27,3 +27,10 @@ export interface NotificationData {
   message: string | null;
   style: string;
 }
+
+export interface ApiAxiosError {
+  code: string;
+  values: string[];
+  path: string[];
+  message: string;
+}

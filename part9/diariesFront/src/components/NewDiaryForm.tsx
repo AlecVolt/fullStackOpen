@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { DiaryEntry, NewDiaryEntry, NotificationData } from '../types';
+import type { ApiAxiosError, DiaryEntry, NewDiaryEntry, NotificationData } from '../types';
 import { createDiary } from '../services/diaryService';
 import axios from 'axios';
 
@@ -28,9 +28,10 @@ const NewDiaryForm = ({
       setDiaries([...diaries, data]);
       setNewDiary(initialEntry);
     } catch (error: unknown) {
-      let errorMessage = 'Error: ';
+      let errorMessage = 'Error:';
       if (axios.isAxiosError(error)) {
-        errorMessage += error.response?.data.error.map((e) => '\n Invalid: ' + e.path[0]);
+        const errors = error.response?.data.error as ApiAxiosError[];
+        errorMessage += errors.map((e) => ` Invalid '${e.path[0]}'`);
       }
       setNotification({ message: errorMessage, style: 'error' });
 
@@ -47,28 +48,93 @@ const NewDiaryForm = ({
         <div>
           <label>
             date
-            <input
-              value={newDiary.date}
-              onChange={({ target }) => setNewDiary((prev) => ({ ...prev, date: target.value }))}
-            />
+            <input type="date" onChange={({ target }) => setNewDiary((prev) => ({ ...prev, date: target.value }))} />
           </label>
         </div>
         <div>
           <label>
             visibility
-            <input
-              value={newDiary.visibility}
-              onChange={({ target }) => setNewDiary((prev) => ({ ...prev, visibility: target.value }))}
-            />
+            <label>
+              <input
+                type="radio"
+                name="visibility"
+                value="great"
+                onChange={({ target }) => setNewDiary((prev) => ({ ...prev, visibility: target.value }))}
+              />
+              great
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="visibility"
+                value="good"
+                onChange={({ target }) => setNewDiary((prev) => ({ ...prev, visibility: target.value }))}
+              />
+              good
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="visibility"
+                value="ok"
+                onChange={({ target }) => setNewDiary((prev) => ({ ...prev, visibility: target.value }))}
+              />
+              ok
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="visibility"
+                value="poor"
+                onChange={({ target }) => setNewDiary((prev) => ({ ...prev, visibility: target.value }))}
+              />
+              poor
+            </label>
           </label>
         </div>
         <div>
           <label>
             weather
-            <input
-              value={newDiary.weather}
-              onChange={({ target }) => setNewDiary((prev) => ({ ...prev, weather: target.value }))}
-            />
+            <label>
+              <input
+                type="radio"
+                value="sunny"
+                onChange={({ target }) => setNewDiary((prev) => ({ ...prev, weather: target.value }))}
+              />
+              sunny
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="rainy"
+                onChange={({ target }) => setNewDiary((prev) => ({ ...prev, weather: target.value }))}
+              />
+              rainy
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="cloudy"
+                onChange={({ target }) => setNewDiary((prev) => ({ ...prev, weather: target.value }))}
+              />
+              cloudy
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="stormy"
+                onChange={({ target }) => setNewDiary((prev) => ({ ...prev, weather: target.value }))}
+              />
+              stormy
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="windy"
+                onChange={({ target }) => setNewDiary((prev) => ({ ...prev, weather: target.value }))}
+              />
+              windy
+            </label>
           </label>
         </div>
         <div>
