@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
-import { NewPatient, NonSensitivePatient } from '../types';
+import { NewPatient, NonSensitivePatient, Patient } from '../types';
 import patientsService from '../services/patientsService';
 import { NewPatientSchema } from '../utils';
 import { ZodError } from 'zod';
@@ -8,6 +8,19 @@ const route = express.Router();
 
 route.get('/', (_req, res: Response<NonSensitivePatient[]>) => {
   res.send(patientsService.getNonSensitivePatients());
+});
+
+// route.get('/', (_req, res: Response<Patient[]>) => {
+//   res.send(patientsService.getPatients());
+// });
+
+route.get('/:id', (req: Request, res: Response<Patient>) => {
+  try {
+    const patient = patientsService.getPatientById(req.params.id);
+    res.send(patient);
+  } catch (error: unknown) {
+    console.log(error);
+  }
 });
 
 const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
