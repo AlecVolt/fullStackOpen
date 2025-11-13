@@ -22,3 +22,8 @@ export interface DiaryEntry {
 }
 
 export type NewDiaryEntry = Omit<DiaryEntry, 'id'>;
+
+export interface NotificationData {
+  message: string | null;
+  style: string;
+}

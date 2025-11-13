@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import type { DiaryEntry, NewDiaryEntry } from '../types';
+import type { DiaryEntry, NewDiaryEntry, NotificationData } from '../types';
 import { createDiary } from '../services/diaryService';
+import axios from 'axios';
 
 const NewDiaryForm = ({
   diaries,
   setDiaries,
+  setNotification,
 }: {
   diaries: DiaryEntry[];
   setDiaries: React.Dispatch<React.SetStateAction<DiaryEntry[]>>;
+  setNotification: React.Dispatch<React.SetStateAction<NotificationData>>;
 }) => {
   const initialEntry = {
     date: '',
@@ -20,9 +23,21 @@ const NewDiaryForm = ({
 
   const diaryCreation = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const data = await createDiary(newDiary);
-    setDiaries([...diaries, data]);
-    setNewDiary(initialEntry);
+    try {
+      const data = await createDiary(newDiary);
+      setDiaries([...diaries, data]);
+      setNewDiary(initialEntry);
+    } catch (error: unknown) {
+      let errorMessage = 'Error: ';
+      if (axios.isAxiosError(error)) {
+        errorMessage += error.response?.data.error.map((e) => '\n Invalid: ' + e.path[0]);
+      }
+      setNotification({ message: errorMessage, style: 'error' });
+
+      setTimeout(() => {
+        setNotification({ message: null, style: 'notification' });
+      }, 3000);
+    }
   };
 
   return (
