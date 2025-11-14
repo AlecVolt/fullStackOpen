@@ -10,10 +10,10 @@ const PatientPage = ({ patients }: { patients: Patient[] }) => {
   console.log(patients);
   return (
     <>
-      <h3>
+      <h2>
         {patient?.name}{' '}
         {patient?.gender === 'female' ? <FemaleIcon /> : patient?.gender === 'male' ? <MaleIcon /> : null}
-      </h3>
+      </h2>
       <div>
         <p>ssh: {patient?.ssn}</p>
         <p>occupation: {patient?.occupation}</p>
