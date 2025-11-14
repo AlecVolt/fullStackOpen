@@ -1,11 +1,19 @@
 import { useParams } from 'react-router-dom';
-import { Patient } from '../../types';
+import { Diagnosis, Patient } from '../../types';
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 
-const PatientPage = ({ patients }: { patients: Patient[] }) => {
+const PatientPage = ({ patients, diagnoses }: { patients: Patient[]; diagnoses: Diagnosis[] }) => {
   const id = useParams().id;
   const patient = patients.find((p) => p.id === id);
+
+  console.log(diagnoses);
+
+  const findDiagnosis = (code: string): Diagnosis | undefined => {
+    const diagnosis = diagnoses.find((d) => d.code === code);
+    return diagnosis;
+  };
+
   return (
     <>
       <h2>
@@ -29,7 +37,9 @@ const PatientPage = ({ patients }: { patients: Patient[] }) => {
               {!e.diagnosisCodes?.length ? null : (
                 <ul>
                   {e.diagnosisCodes?.map((c) => (
-                    <li key={`${e.id}-${c}`}>{c}</li>
+                    <li key={`${e.id}-${c}`}>
+                      {c} {findDiagnosis(c)?.name}
+                    </li>
                   ))}
                 </ul>
               )}
