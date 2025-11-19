@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
-import { NewPatient, Patient } from '../types';
+import { NewPatient, Patient, NewEntry } from '../types';
 import patientsService from '../services/patientsService';
-import { NewPatientSchema } from '../utils';
+import { EntrySchema, NewPatientSchema } from '../utils';
 import { ZodError } from 'zod';
 
 const route = express.Router();
@@ -39,6 +39,11 @@ const errorMiddleware = (error: unknown, _req: Request, res: Response, next: Nex
 route.post('/', newPatientParser, (req: Request<unknown, unknown, NewPatient>, res: Response<NewPatient>) => {
   const addedPatient = patientsService.addPatient(req.body);
   res.json(addedPatient);
+});
+
+route.post('/:userId/entries', (req: Request<{ userId: string }, unknown, NewEntry>, res) => {
+  const editedPatient = patientsService.addPatientEntry(req.params.userId, req.body);
+  res.json(editedPatient);
 });
 
 route.use(errorMiddleware);

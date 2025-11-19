@@ -6,7 +6,8 @@
     "tsc": "tsc",
     "dev": "ts-node-dev src/index.ts",
     "start": "node build/index.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "server": "json-server -p 3001 db.json"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +26,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "json-server": "^1.0.0-beta.3",
     "uuid": "^13.0.0",
     "zod": "^4.1.12"
   }

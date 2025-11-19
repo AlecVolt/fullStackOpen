@@ -1,24 +1,22 @@
 import z from 'zod';
-import { NewPatientSchema } from './utils';
+import {
+  DiagnosisSchema,
+  BaseEntrySchema,
+  NewPatientSchema,
+  HealthCheckEntrySchema,
+  OccupationalHealthcareEntrySchema,
+  HospitalEntrySchema,
+  EntrySchema,
+} from './utils';
 
-export interface Diagnosis {
-  code: string;
-  name: string;
-  latin?: string;
-}
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+
+export type Diagnosis = z.infer<typeof DiagnosisSchema>;
 
 export enum Gender {
   Male = 'male',
   Female = 'female',
   Other = 'other',
-}
-
-interface BaseEntry {
-  id: string;
-  description: string;
-  date: string;
-  specialist: string;
-  diagnosisCodes?: Array<Diagnosis['code']>;
 }
 
 export enum HealthCheckRating {
@@ -28,41 +26,21 @@ export enum HealthCheckRating {
   'CriticalRisk' = 3,
 }
 
-interface HealthCheckEntry extends BaseEntry {
-  type: 'HealthCheck';
-  healthCheckRating: HealthCheckRating;
-}
+export type BaseEntry = z.infer<typeof BaseEntrySchema>;
+export type HealthCheckEntry = z.infer<typeof HealthCheckEntrySchema>;
+export type OccupationalHealthcareEntry = z.infer<typeof OccupationalHealthcareEntrySchema>;
+export type HospitalEntry = z.infer<typeof HospitalEntrySchema>;
 
-type SickLeave = {
-  startDate: string;
-  endDate: string;
-};
+export type Entry = z.infer<typeof EntrySchema>;
 
-interface OccupationalHealthcareEntry extends BaseEntry {
-  type: 'OccupationalHealthcare';
-  employerName: string;
-  sickLeave?: SickLeave;
-}
-
-type Discharge = {
-  date: string;
-  criteria: string;
-};
-
-interface HospitalEntry extends BaseEntry {
-  type: 'Hospital';
-  discharge: Discharge;
-}
-
-export type Entry = HealthCheckEntry | OccupationalHealthcareEntry | HospitalEntry;
+// export type Entry = HealthCheckEntry | OccupationalHealthcareEntry | HospitalEntry;
+export type NewEntry = UnionOmit<Entry, 'id'>;
 
 export type NewPatient = z.infer<typeof NewPatientSchema>;
-
 export interface Patient extends NewPatient {
   id: string;
   entries: Entry[];
 }
-
 export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>;
 
 // export interface Patient {
@@ -75,3 +53,42 @@ export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>;
 // }
 
 // export type NewPatient = Omit<Patient, 'id'>;
+
+// export interface Diagnosis {
+//   code: string;
+//   name: string;
+//   latin?: string;
+// }
+
+// export interface NewBaseEntry {
+//   description: string;
+//   date: string;
+//   specialist: string;
+//   diagnosisCodes?: Array<Diagnosis['code']>;
+// }
+
+// interface HealthCheckEntry extends BaseEntry {
+//   type: 'HealthCheck';
+//   healthCheckRating: HealthCheckRating;
+// }
+
+// type SickLeave = {
+//   startDate: string;
+//   endDate: string;
+// };
+
+// interface OccupationalHealthcareEntry extends BaseEntry {
+//   type: 'OccupationalHealthcare';
+//   employerName: string;
+//   sickLeave?: SickLeave;
+// }
+
+// type Discharge = {
+//   date: string;
+//   criteria: string;
+// };
+
+// interface HospitalEntry extends BaseEntry {
+//   type: 'Hospital';
+//   discharge: Discharge;
+// }
