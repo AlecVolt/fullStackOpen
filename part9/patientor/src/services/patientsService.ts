@@ -1,5 +1,5 @@
 import patientsData from '../../data/patients';
-import { Entry, NewEntry, NewPatient, NonSensitivePatient, Patient } from '../types';
+import { NewEntry, NewPatient, NonSensitivePatient, Patient } from '../types';
 import { v1 as uuid } from 'uuid';
 
 const getPatients = (): Patient[] => {
@@ -23,7 +23,7 @@ const getPatientById = (id: string): Patient | undefined => {
 const addPatient = (data: NewPatient): Patient => {
   const newPatient = {
     id: uuid(),
-    entries: [] as Entry[],
+    //entries: [] as NewEntry[],
     ...data,
   };
 
@@ -33,10 +33,11 @@ const addPatient = (data: NewPatient): Patient => {
 
 const addPatientEntry = (userId: string, entry: NewEntry): Patient => {
   const patient = patientsData.find((p) => p.id === userId) as Patient;
-  const newEntry: Entry = {
-    ...entry,
+  const newEntry = {
     id: uuid(),
+    ...entry,
   };
+
   const editedPatient = { ...patient, entries: patient?.entries.concat(newEntry) };
   patientsData.splice(patientsData.indexOf(patient), 1, editedPatient);
   return editedPatient;

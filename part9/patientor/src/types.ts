@@ -7,9 +7,10 @@ import {
   OccupationalHealthcareEntrySchema,
   HospitalEntrySchema,
   EntrySchema,
+  NewEntrySchema,
 } from './utils';
 
-type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+// type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
 
 export type Diagnosis = z.infer<typeof DiagnosisSchema>;
 
@@ -31,10 +32,11 @@ export type HealthCheckEntry = z.infer<typeof HealthCheckEntrySchema>;
 export type OccupationalHealthcareEntry = z.infer<typeof OccupationalHealthcareEntrySchema>;
 export type HospitalEntry = z.infer<typeof HospitalEntrySchema>;
 
+export type NewEntry = z.infer<typeof NewEntrySchema>;
 export type Entry = z.infer<typeof EntrySchema>;
 
 // export type Entry = HealthCheckEntry | OccupationalHealthcareEntry | HospitalEntry;
-export type NewEntry = UnionOmit<Entry, 'id'>;
+// export type NewEntry = UnionOmit<Entry, 'id'>;
 
 export type NewPatient = z.infer<typeof NewPatientSchema>;
 export interface Patient extends NewPatient {

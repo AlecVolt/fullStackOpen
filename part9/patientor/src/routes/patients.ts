@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { NewPatient, Patient, NewEntry } from '../types';
 import patientsService from '../services/patientsService';
-import { EntrySchema, NewPatientSchema } from '../utils';
+import { NewEntrySchema, NewPatientSchema } from '../utils';
 import { ZodError } from 'zod';
 
 const route = express.Router();
@@ -28,6 +28,15 @@ const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
   }
 };
 
+const newPatientEntryParser = (req: Request, _res: Response, next: NextFunction) => {
+  try {
+    NewEntrySchema.parse(req.body);
+    next();
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
 const errorMiddleware = (error: unknown, _req: Request, res: Response, next: NextFunction) => {
   if (error instanceof ZodError) {
     res.status(400).send({ error: error.issues });
@@ -41,7 +50,7 @@ route.post('/', newPatientParser, (req: Request<unknown, unknown, NewPatient>, r
   res.json(addedPatient);
 });
 
-route.post('/:userId/entries', (req: Request<{ userId: string }, unknown, NewEntry>, res) => {
+route.post('/:userId/entries', newPatientEntryParser, (req: Request<{ userId: string }, unknown, NewEntry>, res) => {
   const editedPatient = patientsService.addPatientEntry(req.params.userId, req.body);
   res.json(editedPatient);
 });
