@@ -5,7 +5,7 @@ import { Diagnosis, Patient } from './types';
 
 import patientService from './services/patients';
 import PatientListPage from './components/PatientListPage';
-import PatientPage from './components/PatientListPage/PatientPage';
+import PatientPage from './components/SinglePatientPage/PatientPage';
 
 import diagnosesService from './services/diagnoses';
 
@@ -14,8 +14,6 @@ const App = () => {
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
 
   useEffect(() => {
-    // void axios.get<void>(`${apiBaseUrl}/ping`);
-
     const fetchPatientList = async () => {
       const patients = await patientService.getAll();
       setPatients(patients);

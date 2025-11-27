@@ -1,6 +1,6 @@
 import { Diagnosis, Entry } from '../../types';
 import EntryInfo from './EntryInfo';
-import HealthCheckRatingBar from './HealthCheckRatingBar';
+import HealthCheckRatingBar from '../PatientListPage/HealthCheckRatingBar';
 
 const EntryView = ({ entry, diagnoses }: { entry: Entry; diagnoses: Diagnosis[] }) => {
   const findDiagnosis = (code: string): Diagnosis | undefined => {
