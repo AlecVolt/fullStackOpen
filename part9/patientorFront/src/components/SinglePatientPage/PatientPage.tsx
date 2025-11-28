@@ -64,7 +64,9 @@ const PatientPage = ({ patients, diagnoses }: { patients: Patient[]; diagnoses: 
         <p>occupation: {patient?.occupation}</p>
       </div>
       <Button onClick={changeIsNewEntryFormVisisble}>{buttonLabel}</Button>
-      {isNewEntryFormVisisble && id ? <AddEntry submitNewEntry={submitNewEntry} error={error} /> : null}
+      {isNewEntryFormVisisble && id ? (
+        <AddEntry submitNewEntry={submitNewEntry} error={error} diagnoses={diagnoses} />
+      ) : null}
       <h3>Entries</h3>
       <div>
         {!patient?.entries.length ? (

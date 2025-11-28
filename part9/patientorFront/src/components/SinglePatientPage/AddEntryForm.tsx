@@ -1,14 +1,33 @@
-import { Button, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
-import { HealthCheckRating, NewEntry } from '../../types';
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  SelectChangeEvent,
+  TextField,
+} from '@mui/material';
+import { SyntheticEvent, useEffect, useState } from 'react';
+import { Diagnosis, HealthCheckRating, NewEntry } from '../../types';
 
-const AddEntryForm = ({ type, submitNewEntry }: { type: string; submitNewEntry: (values: NewEntry) => void }) => {
+const AddEntryForm = ({
+  type,
+  submitNewEntry,
+  diagnoses,
+}: {
+  type: 'HealthCheck' | 'OccupationalHealthcare' | 'Hospital';
+  submitNewEntry: (values: NewEntry) => void;
+  diagnoses: Diagnosis[];
+}) => {
   const baseInit = {
     type,
     description: '',
     date: '',
     specialist: '',
-    diagnosisCodes: [''],
+    diagnosisCodes: [],
   };
 
   interface HealthCheckRatingOption {
@@ -41,28 +60,33 @@ const AddEntryForm = ({ type, submitNewEntry }: { type: string; submitNewEntry: 
     discharge: { date: '', criteria: '' },
   };
 
-  const setInitEntry = (type: string): NewEntry => {
-    return type === 'HealthCheck'
-      ? (healthCheckInit as NewEntry)
-      : type === 'OccupationalHealthcare'
-      ? (occupationalHealthcareInit as NewEntry)
-      : type === 'Hospital'
-      ? (hospitalInit as NewEntry)
-      : (baseInit as NewEntry);
+  const setInitEntry = (t: 'HealthCheck' | 'OccupationalHealthcare' | 'Hospital'): NewEntry => {
+    switch (t) {
+      case 'HealthCheck':
+        return healthCheckInit as NewEntry;
+      case 'OccupationalHealthcare':
+        return occupationalHealthcareInit as NewEntry;
+      case 'Hospital':
+        return hospitalInit as NewEntry;
+      default:
+        throw new Error(`Unsupported entry type: ${t}`);
+    }
   };
 
   const [entry, setEntry] = useState<NewEntry>(setInitEntry(type));
+
+  const diagnosisCodesList = diagnoses.map((d) => d.code);
 
   useEffect(() => {
     setEntry(setInitEntry(type));
   }, [type]);
 
-  const onCodesChange = (event: ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    if (typeof event.target.value === 'string') {
-      const values = event.target.value.split(', ');
-      setEntry((prev) => ({ ...prev, diagnosisCodes: values }));
-    }
+  const onDiagnosisCodesChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value;
+    setEntry((prev) => ({
+      ...prev,
+      diagnosisCodes: typeof value === 'string' ? value.split(',') : value,
+    }));
   };
 
   const onHealthCheckRatingChange = (event: SelectChangeEvent<string>) => {
@@ -95,8 +119,11 @@ const AddEntryForm = ({ type, submitNewEntry }: { type: string; submitNewEntry: 
           />
           <TextField
             label="date"
-            placeholder="YYYY-MM-DD"
             fullWidth
+            type="date"
+            InputLabelProps={{
+              shrink: true,
+            }}
             value={entry.date}
             onChange={({ target }) => setEntry((prev) => ({ ...prev, date: target.value }))}
           />
@@ -106,12 +133,25 @@ const AddEntryForm = ({ type, submitNewEntry }: { type: string; submitNewEntry: 
             value={entry.specialist}
             onChange={({ target }) => setEntry((prev) => ({ ...prev, specialist: target.value }))}
           />
-          <TextField
-            label="diagnosis codes"
-            fullWidth
-            value={entry.diagnosisCodes?.join(', ')}
-            onChange={onCodesChange}
-          />
+
+          <FormControl fullWidth>
+            <InputLabel id="diagnosis-codes-label">diagnosis codes</InputLabel>
+            <Select<string[]>
+              labelId="diagnosis-codes-label"
+              multiple
+              value={entry.diagnosisCodes ?? []}
+              onChange={onDiagnosisCodesChange}
+              input={<OutlinedInput label="diagnosis codes" />}
+              renderValue={(selected) => selected.join(', ')}
+            >
+              {diagnosisCodesList.map((c) => (
+                <MenuItem key={c} value={c}>
+                  <Checkbox checked={entry.diagnosisCodes?.includes(c)} />
+                  <ListItemText primary={c} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           {entry.type === 'HealthCheck' ? (
             <Select
               label="Health Check Rating"
@@ -135,7 +175,10 @@ const AddEntryForm = ({ type, submitNewEntry }: { type: string; submitNewEntry: 
               <TextField
                 label="sick leave start date"
                 value={entry.sickLeave?.startDate}
-                placeholder="YYYY-MM-DD"
+                type="date"
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 onChange={({ target }) =>
                   setEntry((prev) => ({ ...prev, sickLeave: { ...entry.sickLeave, startDate: target.value } }))
                 }
@@ -143,7 +186,10 @@ const AddEntryForm = ({ type, submitNewEntry }: { type: string; submitNewEntry: 
               <TextField
                 label="sick leave end date"
                 value={entry.sickLeave?.endDate}
-                placeholder="YYYY-MM-DD"
+                type="date"
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 onChange={({ target }) =>
                   setEntry((prev) => ({ ...prev, sickLeave: { ...entry.sickLeave, endDate: target.value } }))
                 }
@@ -153,7 +199,11 @@ const AddEntryForm = ({ type, submitNewEntry }: { type: string; submitNewEntry: 
             <>
               <TextField
                 label="discharge date"
+                type="date"
                 value={entry.discharge.date}
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 onChange={({ target }) =>
                   setEntry((prev) => ({ ...prev, discharge: { ...entry.discharge, date: target.value } }))
                 }

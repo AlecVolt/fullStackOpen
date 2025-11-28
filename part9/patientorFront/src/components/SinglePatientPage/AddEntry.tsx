@@ -1,17 +1,28 @@
 import { Alert, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { useState } from 'react';
 import AddEntryForm from './AddEntryForm';
-import { NewEntry } from '../../types';
+import { Diagnosis, NewEntry } from '../../types';
 
-const AddEntry = ({ submitNewEntry, error }: { submitNewEntry: (values: NewEntry) => void; error?: string }) => {
-  const [type, setType] = useState('---Select type---');
+type Placeholder = '---Select type---';
+type EntryType = 'HealthCheck' | 'OccupationalHealthcare' | 'Hospital';
+
+const AddEntry = ({
+  submitNewEntry,
+  error,
+  diagnoses,
+}: {
+  submitNewEntry: (values: NewEntry) => void;
+  error?: string;
+  diagnoses: Diagnosis[];
+}) => {
+  const [type, setType] = useState<Placeholder | EntryType>('---Select type---');
   const [isVisisble, setIsVisisble] = useState(false);
 
   const onTypeChange = (event: SelectChangeEvent<string>) => {
     event.preventDefault();
     const value = event.target.value;
     if (typeof value === 'string' && value !== '---Select type---') {
-      setType(value);
+      setType(value as EntryType);
       setIsVisisble(true);
     }
   };
@@ -26,7 +37,9 @@ const AddEntry = ({ submitNewEntry, error }: { submitNewEntry: (values: NewEntry
         <MenuItem value={'Hospital'}>Hospital</MenuItem>
       </Select>
       {error && <Alert severity="error">{error}</Alert>}
-      {isVisisble ? <AddEntryForm type={type} submitNewEntry={submitNewEntry} /> : null}
+      {isVisisble && (type === 'HealthCheck' || type === 'OccupationalHealthcare' || type === 'Hospital') ? (
+        <AddEntryForm type={type} submitNewEntry={submitNewEntry} diagnoses={diagnoses} />
+      ) : null}
     </div>
   );
 };
