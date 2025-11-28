@@ -1,16 +1,14 @@
 import { Button, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import { HealthCheckRating, NewEntry } from '../../types';
-import entryService from '../../services/entries';
-import axios from 'axios';
 
-const AddEntryForm = ({ type, id }: { type: string; id: string }) => {
+const AddEntryForm = ({ type, submitNewEntry }: { type: string; submitNewEntry: (values: NewEntry) => void }) => {
   const baseInit = {
     type,
     description: '',
     date: '',
     specialist: '',
-    diagnosisCodes: undefined,
+    diagnosisCodes: [''],
   };
 
   interface HealthCheckRatingOption {
@@ -43,26 +41,20 @@ const AddEntryForm = ({ type, id }: { type: string; id: string }) => {
     discharge: { date: '', criteria: '' },
   };
 
-  const [entry, setEntry] = useState<NewEntry>(
-    type === 'HealthCheck'
+  const setInitEntry = (type: string): NewEntry => {
+    return type === 'HealthCheck'
       ? (healthCheckInit as NewEntry)
       : type === 'OccupationalHealthcare'
       ? (occupationalHealthcareInit as NewEntry)
       : type === 'Hospital'
       ? (hospitalInit as NewEntry)
-      : (baseInit as NewEntry)
-  );
+      : (baseInit as NewEntry);
+  };
+
+  const [entry, setEntry] = useState<NewEntry>(setInitEntry(type));
 
   useEffect(() => {
-    setEntry(
-      type === 'HealthCheck'
-        ? (healthCheckInit as NewEntry)
-        : type === 'OccupationalHealthcare'
-        ? (occupationalHealthcareInit as NewEntry)
-        : type === 'Hospital'
-        ? (hospitalInit as NewEntry)
-        : (baseInit as NewEntry)
-    );
+    setEntry(setInitEntry(type));
   }, [type]);
 
   const onCodesChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -87,21 +79,12 @@ const AddEntryForm = ({ type, id }: { type: string; id: string }) => {
 
   const addNewEntry = async (event: SyntheticEvent) => {
     event.preventDefault();
-    console.log(entry);
-    try {
-      const newEntry = await entryService.create(id, entry);
-      console.log(newEntry);
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        console.error(error);
-      }
-    }
+    submitNewEntry(entry);
   };
 
   return (
     <>
       <h3>New {type} entry</h3>
-      <p>for {id}</p>
       <form onSubmit={addNewEntry}>
         <div>
           <TextField

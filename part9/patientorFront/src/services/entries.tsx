@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { apiBaseUrl } from '../constants';
-import { NewEntry } from '../types';
+import { NewEntry, Patient } from '../types';
 
 const create = async (id: string, object: NewEntry) => {
-  const { data } = await axios.post<NewEntry>(`${apiBaseUrl}/patients/${id}/entries`, object);
-  console.log(data);
+  const { data } = await axios.post<Patient>(`${apiBaseUrl}/patients/${id}/entries`, object);
   return data;
 };
 

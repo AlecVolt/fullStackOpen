@@ -1,8 +1,9 @@
-import { InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Alert, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { useState } from 'react';
 import AddEntryForm from './AddEntryForm';
+import { NewEntry } from '../../types';
 
-const AddEntry = ({ id }: { id: string }) => {
+const AddEntry = ({ submitNewEntry, error }: { submitNewEntry: (values: NewEntry) => void; error?: string }) => {
   const [type, setType] = useState('---Select type---');
   const [isVisisble, setIsVisisble] = useState(false);
 
@@ -24,7 +25,8 @@ const AddEntry = ({ id }: { id: string }) => {
         <MenuItem value={'OccupationalHealthcare'}>Occupational Healthcare</MenuItem>
         <MenuItem value={'Hospital'}>Hospital</MenuItem>
       </Select>
-      {isVisisble ? <AddEntryForm type={type} id={id} /> : null}
+      {error && <Alert severity="error">{error}</Alert>}
+      {isVisisble ? <AddEntryForm type={type} submitNewEntry={submitNewEntry} /> : null}
     </div>
   );
 };
